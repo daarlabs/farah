@@ -3,7 +3,7 @@ package datatable_feature
 import (
 	. "github.com/daarlabs/arcanum/gox"
 	
-	"component/ui"
+	"github.com/daarlabs/farah/ui"
 )
 
 type RowBuilder[T any] interface {

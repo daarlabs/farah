@@ -7,8 +7,8 @@ import (
 	. "github.com/daarlabs/arcanum/gox"
 	"github.com/daarlabs/arcanum/mirage"
 	
-	"component/ui"
-	"component/ui/icon_ui"
+	"github.com/daarlabs/farah/ui"
+	"github.com/daarlabs/farah/ui/icon_ui"
 )
 
 type DarkModeSwtitcher struct {

@@ -3,7 +3,7 @@ package icon_ui
 import (
 	. "github.com/daarlabs/arcanum/gox"
 	
-	"component/ui"
+	"github.com/daarlabs/farah/ui"
 )
 
 func Icon(props Props) Node {

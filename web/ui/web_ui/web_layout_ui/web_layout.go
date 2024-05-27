@@ -4,14 +4,14 @@ import (
 	. "github.com/daarlabs/arcanum/gox"
 	"github.com/daarlabs/arcanum/mirage"
 	
-	"component/ui/menu_ui"
-	"component/ui/menu_ui/menu_item_ui"
+	"github.com/daarlabs/farah/ui/menu_ui"
+	"github.com/daarlabs/farah/ui/menu_ui/menu_item_ui"
 	
-	"component/feature/dark_mode_switcher_feature"
-	"component/ui"
-	"component/ui/layout_ui"
-	"component/ui/nav_ui"
-	"component/ui/nav_ui/nav_section_ui"
+	"github.com/daarlabs/farah/feature/dark_mode_switcher_feature"
+	"github.com/daarlabs/farah/ui"
+	"github.com/daarlabs/farah/ui/layout_ui"
+	"github.com/daarlabs/farah/ui/nav_ui"
+	"github.com/daarlabs/farah/ui/nav_ui/nav_section_ui"
 )
 
 func Layout(c mirage.Ctx, nodes ...Node) Node {

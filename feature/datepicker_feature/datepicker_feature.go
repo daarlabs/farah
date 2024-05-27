@@ -9,12 +9,12 @@ import (
 	
 	. "github.com/daarlabs/arcanum/gox"
 	
-	"component/ui/form_ui/field_label_ui"
-	"component/ui/form_ui/hidden_field_ui"
+	"github.com/daarlabs/farah/ui/form_ui/field_label_ui"
+	"github.com/daarlabs/farah/ui/form_ui/hidden_field_ui"
 	"github.com/daarlabs/arcanum/hx"
 	
-	"component/ui"
-	"component/ui/menu_ui"
+	"github.com/daarlabs/farah/ui"
+	"github.com/daarlabs/farah/ui/menu_ui"
 )
 
 type Datepicker struct {

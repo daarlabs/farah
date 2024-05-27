@@ -3,7 +3,7 @@ package nav_section_ui
 import (
 	. "github.com/daarlabs/arcanum/gox"
 	
-	"component/ui"
+	"github.com/daarlabs/farah/ui"
 )
 
 func NavSection(props Props, nodes ...Node) Node {

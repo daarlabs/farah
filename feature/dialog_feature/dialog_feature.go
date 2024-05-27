@@ -4,7 +4,7 @@ import (
 	. "github.com/daarlabs/arcanum/gox"
 	"github.com/daarlabs/arcanum/mirage"
 	
-	"component/ui/button_ui"
+	"github.com/daarlabs/farah/ui/button_ui"
 	"github.com/daarlabs/arcanum/hx"
 )
 

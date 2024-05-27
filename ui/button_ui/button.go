@@ -5,9 +5,9 @@ import (
 	
 	. "github.com/daarlabs/arcanum/gox"
 	
-	"component/ui"
-	"component/ui/icon_ui"
-	"component/ui/spinner_ui"
+	"github.com/daarlabs/farah/ui"
+	"github.com/daarlabs/farah/ui/icon_ui"
+	"github.com/daarlabs/farah/ui/spinner_ui"
 )
 
 func button(props Props, variantClass string, nodes ...Node) Node {

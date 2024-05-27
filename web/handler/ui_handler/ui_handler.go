@@ -4,17 +4,17 @@ import (
 	. "github.com/daarlabs/arcanum/gox"
 	"github.com/daarlabs/arcanum/mirage"
 	
-	"component/ui/button_ui"
-	"component/ui/form_ui/checkbox_ui"
-	"component/ui/form_ui/number_field_ui"
-	"component/ui/form_ui/radio_ui"
-	"component/ui/form_ui/text_field_ui"
-	"component/ui/form_ui/textarea_ui"
-	"component/ui/icon_ui"
-	"component/ui/page_ui"
-	"component/ui/page_ui/breadcrumbs_ui"
-	"component/ui/page_ui/flash_message_ui"
-	"component/ui/spinner_ui"
+	"github.com/daarlabs/farah/ui/button_ui"
+	"github.com/daarlabs/farah/ui/form_ui/checkbox_ui"
+	"github.com/daarlabs/farah/ui/form_ui/number_field_ui"
+	"github.com/daarlabs/farah/ui/form_ui/radio_ui"
+	"github.com/daarlabs/farah/ui/form_ui/text_field_ui"
+	"github.com/daarlabs/farah/ui/form_ui/textarea_ui"
+	"github.com/daarlabs/farah/ui/icon_ui"
+	"github.com/daarlabs/farah/ui/page_ui"
+	"github.com/daarlabs/farah/ui/page_ui/breadcrumbs_ui"
+	"github.com/daarlabs/farah/ui/page_ui/flash_message_ui"
+	"github.com/daarlabs/farah/ui/spinner_ui"
 )
 
 func Get() mirage.Handler {

@@ -4,7 +4,7 @@ import (
 	. "github.com/daarlabs/arcanum/gox"
 	"github.com/daarlabs/arcanum/mirage"
 	
-	"component/feature/dark_mode_switcher_feature"
+	"github.com/daarlabs/farah/feature/dark_mode_switcher_feature"
 )
 
 func Layout(c mirage.Ctx, nodes ...Node) Node {

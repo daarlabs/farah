@@ -3,8 +3,8 @@ package breadcrumbs_ui
 import (
 	. "github.com/daarlabs/arcanum/gox"
 	
-	"component/ui"
-	"component/ui/icon_ui"
+	"github.com/daarlabs/farah/ui"
+	"github.com/daarlabs/farah/ui/icon_ui"
 )
 
 func Breadcrumbs(mainLink string, nodes ...Node) Node {

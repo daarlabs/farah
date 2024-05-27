@@ -13,15 +13,15 @@ import (
 	
 	"github.com/daarlabs/arcanum/hx"
 	
-	"component/ui/form_ui/field_label_ui"
-	"component/ui/form_ui/hidden_field_ui"
+	"github.com/daarlabs/farah/ui/form_ui/field_label_ui"
+	"github.com/daarlabs/farah/ui/form_ui/hidden_field_ui"
 	
-	"component/model/select_model"
-	"component/ui"
-	"component/ui/form_ui/error_message_ui"
-	"component/ui/icon_ui"
-	"component/ui/menu_ui"
-	"component/ui/menu_ui/menu_item_ui"
+	"github.com/daarlabs/farah/model/select_model"
+	"github.com/daarlabs/farah/ui"
+	"github.com/daarlabs/farah/ui/form_ui/error_message_ui"
+	"github.com/daarlabs/farah/ui/icon_ui"
+	"github.com/daarlabs/farah/ui/menu_ui"
+	"github.com/daarlabs/farah/ui/menu_ui/menu_item_ui"
 )
 
 type Autocomplete[T comparable] struct {

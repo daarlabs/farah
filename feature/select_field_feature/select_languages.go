@@ -1,7 +1,7 @@
 package select_field_feature
 
 import (
-	"component/model/select_model"
+	"github.com/daarlabs/farah/model/select_model"
 	"github.com/daarlabs/arcanum/mirage"
 )
 

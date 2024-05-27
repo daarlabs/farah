@@ -1,6 +1,6 @@
 package fake_model
 
-import "component/model/select_model"
+import "github.com/daarlabs/farah/model/select_model"
 
 var (
 	Categories = []select_model.Option[int]{

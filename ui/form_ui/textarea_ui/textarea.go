@@ -5,8 +5,8 @@ import (
 	
 	. "github.com/daarlabs/arcanum/gox"
 	
-	"component/ui/form_ui/error_message_ui"
-	"component/ui/form_ui/field_label_ui"
+	"github.com/daarlabs/farah/ui/form_ui/error_message_ui"
+	"github.com/daarlabs/farah/ui/form_ui/field_label_ui"
 )
 
 func TextArea(props Props) Node {

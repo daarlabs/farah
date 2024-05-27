@@ -1,9 +1,8 @@
-module component
+module github.com/daarlabs/farah
 
 go 1.22
 
 require (
-	github.com/go-redis/redis/v8 v8.11.5
 	github.com/iancoleman/strcase v0.3.0
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842
 )

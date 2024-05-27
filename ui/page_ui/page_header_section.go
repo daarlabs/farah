@@ -3,7 +3,7 @@ package page_ui
 import (
 	"github.com/daarlabs/arcanum/gox"
 	
-	"component/ui"
+	"github.com/daarlabs/farah/ui"
 )
 
 func HeaderSection(props Props, nodes ...gox.Node) gox.Node {

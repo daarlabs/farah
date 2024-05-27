@@ -9,9 +9,9 @@ import (
 	"github.com/daarlabs/arcanum/quirk"
 	"github.com/daarlabs/arcanum/stimulus"
 	
-	"component/ui"
-	"component/ui/icon_ui"
-	"component/ui/search_ui"
+	"github.com/daarlabs/farah/ui"
+	"github.com/daarlabs/farah/ui/icon_ui"
+	"github.com/daarlabs/farah/ui/search_ui"
 	"github.com/daarlabs/arcanum/hx"
 	
 	. "github.com/daarlabs/arcanum/gox"

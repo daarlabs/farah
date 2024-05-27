@@ -5,7 +5,7 @@ import (
 	
 	"github.com/daarlabs/arcanum/gox"
 	
-	"component/ui"
+	"github.com/daarlabs/farah/ui"
 )
 
 func Menu(props Props, handler gox.Node, nodes ...gox.Node) gox.Node {

@@ -3,10 +3,10 @@ package search_ui
 import (
 	"github.com/daarlabs/arcanum/gox"
 	
-	"component/ui"
-	"component/ui/form_ui/error_message_ui"
-	"component/ui/form_ui/field_label_ui"
-	"component/ui/icon_ui"
+	"github.com/daarlabs/farah/ui"
+	"github.com/daarlabs/farah/ui/form_ui/error_message_ui"
+	"github.com/daarlabs/farah/ui/form_ui/field_label_ui"
+	"github.com/daarlabs/farah/ui/icon_ui"
 )
 
 func Search(props Props, nodes ...gox.Node) gox.Node {

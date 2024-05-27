@@ -6,10 +6,10 @@ import (
 	
 	"github.com/daarlabs/arcanum/config"
 	
-	"component/web/handler/feature_handler"
-	"component/web/handler/home_handler"
-	"component/web/handler/ui_handler"
-	"component/web/ui/web_ui/web_layout_ui"
+	"github.com/daarlabs/farah/web/handler/feature_handler"
+	"github.com/daarlabs/farah/web/handler/home_handler"
+	"github.com/daarlabs/farah/web/handler/ui_handler"
+	"github.com/daarlabs/farah/web/ui/web_ui/web_layout_ui"
 )
 
 func main() {
