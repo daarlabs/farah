@@ -1,0 +1,10 @@
+{
+	"plugins": [],
+	"semi": false,
+	"tabWidth": 4,
+	"useTabs": true,
+	"singleQuote": true,
+	"trailingComma": "all",
+	"printWidth": 120,
+	"arrowParens": "avoid"
+}

@@ -1,0 +1,4 @@
+.cache/
+assets/node_modules/
+web/public/dist/
+web/public/dist/manifest.json

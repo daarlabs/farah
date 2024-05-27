@@ -1,0 +1,63 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+
+* {
+	padding: 0;
+	margin: 0;
+	box-sizing: border-box;
+}
+
+*:focus {
+	outline: none !important;
+}
+
+.lazy {
+	@apply transition duration-500;
+}
+
+.lazy:not(.loaded) {
+	@apply blur;
+}
+
+@layer utilities {
+	.is-invisible.is-clickable {
+		@apply absolute top-0 left-0 h-0 w-0 p-0 m-0;
+	}
+	
+	.is-invisible {
+		@apply invisible;
+		@apply opacity-0;
+		@apply scale-95;
+	}
+	
+	.is-visible {
+		@apply visible;
+		@apply opacity-100;
+		@apply scale-100;
+	}
+	
+	.is-disabled {
+		@apply opacity-30;
+		@apply select-none;
+		@apply pointer-events-none;
+	}
+	
+	.hidden-input {
+		@apply absolute;
+		@apply m-0;
+		@apply p-0;
+		@apply invisible;
+		@apply w-0;
+		@apply h-0;
+	}
+}
+
+.indicator {
+	@apply invisible opacity-0;
+}
+
+.htmx-request .indicator, .htmx-request.indicator, .form-submit .indicator {
+	@apply visible opacity-100;
+}
