@@ -1,7 +1,9 @@
 package menu_ui
 
 import (
-	"github.com/daarlabs/arcanum/stimulus"
+	"github.com/daarlabs/arcanum/alpine"
+	"github.com/daarlabs/arcanum/mirage"
+	"github.com/daarlabs/arcanum/tempest"
 	
 	"github.com/daarlabs/arcanum/gox"
 	
@@ -16,17 +18,16 @@ func Menu(props Props, handler gox.Node, nodes ...gox.Node) gox.Node {
 		props.PositionY = ui.Bottom
 	}
 	return gox.Div(
+		alpine.Data(mirage.Map{"open": props.Open}),
+		alpine.Click("open = false", alpine.Outside),
 		gox.If(
 			props.Id != "",
 			gox.Id(props.Id),
 		),
-		gox.Clsx{
-			"relative flex": true,
-			"group":         !props.Clickable,
-		},
+		tempest.Class().Relative().Flex().
+			If(props.Clickable, tempest.Class().Group()),
 		gox.If(
 			props.Clickable,
-			stimulus.Controller("menu"),
 		),
 		handler,
 		gox.Div(
@@ -34,29 +35,25 @@ func Menu(props Props, handler gox.Node, nodes ...gox.Node) gox.Node {
 				props.OptionsId != "",
 				gox.Id(props.OptionsId),
 			),
-			gox.Clsx{
-				"transition absolute z-40 overflow-y-auto rounded bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 shadow-lg": true,
-				"min-h-[200px]":          !props.Autoheight,
-				"max-h-[200px]":          props.Scrollable,
-				"is-invisible":           !props.Open,
-				"is-visible":             props.Open,
-				"top-full":               props.PositionY == ui.Bottom,
-				"right-0":                props.PositionX == ui.Right,
-				"bottom-full":            props.PositionY == ui.Top,
-				"left-0":                 props.PositionX == ui.Left,
-				"origin-top-left":        props.PositionY == ui.Bottom && props.PositionX == ui.Left,
-				"origin-top-right":       props.PositionY == ui.Bottom && props.PositionX == ui.Right,
-				"origin-bottom-left":     props.PositionY == ui.Top && props.PositionX == ui.Left,
-				"origin-bottom-right":    props.PositionY == ui.Top && props.PositionX == ui.Right,
-				"group-hover:is-visible": !props.Clickable,
-				"is-clickable":           props.Clickable,
-				"w-full":                 props.Fullwidth,
-				"w-[200px]":              !props.Fullwidth,
-			},
-			gox.If(
-				props.Clickable,
-				stimulus.Target("menu", "menu"),
-			),
+			alpine.Bind("class", "open && 'is-visible'"),
+			tempest.Class().Transition().Absolute().Z(40).OverflowY("auto").Rounded().ShadowLg().
+				BgWhite().BgSlate(800, tempest.Dark()).
+				Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
+				If(!props.Autoheight, tempest.Class().MinH("200px")).
+				If(props.Scrollable, tempest.Class().MaxH("200px")).
+				If(!props.Open, tempest.Class("is-invisible")).
+				If(props.Open, tempest.Class("is-visible")).
+				If(props.PositionY == ui.Bottom, tempest.Class().Top("full")).
+				If(props.PositionX == ui.Right, tempest.Class().Right(0)).
+				If(props.PositionY == ui.Top, tempest.Class().Bottom("full")).
+				If(props.PositionX == ui.Left, tempest.Class().Left(0)).
+				If(props.PositionY == ui.Bottom && props.PositionX == ui.Left, tempest.Class().Origin("top-left")).
+				If(props.PositionY == ui.Bottom && props.PositionX == ui.Right, tempest.Class().Origin("top-right")).
+				If(props.PositionY == ui.Top && props.PositionX == ui.Left, tempest.Class().Origin("bottom-left")).
+				If(props.PositionY == ui.Top && props.PositionX == ui.Right, tempest.Class().Origin("bottom-right")).
+				If(!props.Clickable, tempest.Class().Visible(tempest.Hover(tempest.Group))).
+				If(props.Fullwidth, tempest.Class().W("full")).
+				If(!props.Fullwidth, tempest.Class().W("200px")),
 			gox.Fragment(nodes...),
 		),
 	)

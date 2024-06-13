@@ -11,6 +11,7 @@ type Props struct {
 	Messages []string
 	Disabled bool
 	Required bool
+	Boxed    bool
 }
 
 func CreateProps(field form.Field[string]) Props {

@@ -14,6 +14,7 @@ type Props struct {
 	Autofocus   bool
 	Disabled    bool
 	Required    bool
+	Boxed       bool
 }
 
 const (
@@ -33,4 +34,9 @@ func CreateProps(field form.Field[string]) Props {
 		Autofocus: field.Autofocus,
 		Required:  field.Required,
 	}
+}
+
+func (p Props) Box() Props {
+	p.Boxed = true
+	return p
 }

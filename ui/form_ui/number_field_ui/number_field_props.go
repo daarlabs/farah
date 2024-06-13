@@ -1,8 +1,9 @@
 package number_field_ui
 
 import (
-	"github.com/daarlabs/arcanum/form"
 	"golang.org/x/exp/constraints"
+	
+	"github.com/daarlabs/arcanum/form"
 )
 
 type Props[T constraints.Integer | constraints.Float] struct {
@@ -14,6 +15,7 @@ type Props[T constraints.Integer | constraints.Float] struct {
 	Autofocus bool
 	Disabled  bool
 	Required  bool
+	Boxed     bool
 }
 
 func CreateProps[T constraints.Integer | constraints.Float](field form.Field[T]) Props[T] {

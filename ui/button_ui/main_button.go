@@ -1,11 +1,18 @@
 package button_ui
 
-import . "github.com/daarlabs/arcanum/gox"
+import (
+	. "github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
+)
 
 func MainButton(props Props, nodes ...Node) Node {
 	return button(
 		props,
-		"bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 font-bold hover:border-primary-400 dark:hover:border-primary-200 text-slate-900 dark:text-white",
+		tempest.Class().BgWhite().BgSlate(900, tempest.Dark()).
+			BorderSlate(300).BorderSlate(600, tempest.Dark()).
+			BorderSlate(400, tempest.Hover()).BorderSlate(200, tempest.Dark(), tempest.Hover()).
+			TextSlate(900).TextWhite(tempest.Dark()).
+			FontBold(),
 		nodes...,
 	)
 }

@@ -2,13 +2,13 @@ package page_ui
 
 import (
 	"github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
 )
 
 func Page(props Props, nodes ...gox.Node) gox.Node {
 	return gox.Div(
-		gox.Clsx{
-			"grid gap-4 h-full grid-rows-[48px_1fr]": true,
-		},
+		tempest.Class().Grid().H("full").
+			If(props.Header, tempest.Class().GridRows("48px 1fr")),
 		gox.Fragment(nodes...),
 	)
 }

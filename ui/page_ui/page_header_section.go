@@ -2,18 +2,17 @@ package page_ui
 
 import (
 	"github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
 	
 	"github.com/daarlabs/farah/ui"
 )
 
 func HeaderSection(props Props, nodes ...gox.Node) gox.Node {
 	return gox.Div(
-		gox.Clsx{
-			"flex items-center h-12": true,
-			"ml-auto":                props.AlignX == ui.Right,
-			"mr-auto":                props.AlignX == ui.Left,
-			"mx-auto":                props.AlignX == ui.Center,
-		},
+		tempest.Class().Flex().ItemsCenter().H(12).
+			If(props.AlignX == ui.Right, tempest.Class().Ml("auto")).
+			If(props.AlignX == ui.Left, tempest.Class().Mr("auto")).
+			If(props.AlignX == ui.Center, tempest.Class().Mx("auto")),
 		gox.Fragment(nodes...),
 	)
 }

@@ -1,11 +1,14 @@
 package button_ui
 
-import . "github.com/daarlabs/arcanum/gox"
+import (
+	. "github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
+)
 
 func EmeraldButton(props Props, nodes ...Node) Node {
 	return button(
 		props,
-		"bg-emerald-500 hover:bg-emerald-600 text-white",
+		tempest.Class().BgEmerald(500).BgEmerald(600, tempest.Hover()).TextWhite(),
 		nodes...,
 	)
 }

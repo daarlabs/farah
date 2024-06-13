@@ -1,13 +1,20 @@
 package spinner_ui
 
-import . "github.com/daarlabs/arcanum/gox"
+import (
+	. "github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
+	"github.com/daarlabs/farah/palette"
+)
 
-func Spinner(props Props) Node {
+func Spinner(props Props, nodes ...Node) Node {
 	return Div(
-		Clsx{
-			"transition absolute inset-0 m-auto grid place-items-center bg-white dark:bg-slate-800 bg-opacity-70 dark:bg-opacity-70": true,
-			"indicator": !props.Visible,
-		},
-		Div(Class("animate-spin size-5 rounded-full border-[3px] border-white dark:border-slate-700 border-t-primary-400 dark:border-t-primary-100")),
+		tempest.Class().Transition().Absolute().Inset(0).M("auto").Grid().PlaceItemsCenter().
+			BgWhite(tempest.Opacity(0.7)).BgSlate(800, tempest.Dark(), tempest.Opacity(0.7)).
+			If(props.Class != nil, props.Class),
+		Div(
+			tempest.Class().Spin().Size(5).RoundedFull().Border(3).BorderWhite().BorderSlate(600, tempest.Dark()).
+				BorderTColor(palette.Primary, 400).BorderTColor(palette.Primary, 100, tempest.Dark()),
+		),
+		Fragment(nodes...),
 	)
 }

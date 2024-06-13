@@ -2,12 +2,19 @@ package nav_ui
 
 import (
 	. "github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
+	"github.com/daarlabs/farah/palette"
 )
 
-func NavLink(link string, nodes ...Node) Node {
+func NavLink(props Props, nodes ...Node) Node {
 	return A(
-		Class("transition text-xs font-semibold text-slate-900 dark:text-white hover:text-primary-400 dark:hover:text-primary-100"),
-		Href(link),
+		tempest.Class().
+			Transition().
+			TextXs().
+			FontSemibold().TextSlate(900).TextWhite(tempest.Dark()).
+			Text(palette.Primary, 400, tempest.Hover()).
+			Text(palette.Primary, 100, tempest.Dark(), tempest.Hover()),
+		Href(props.Link),
 		Fragment(nodes...),
 	)
 }

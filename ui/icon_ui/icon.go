@@ -2,6 +2,7 @@ package icon_ui
 
 import (
 	. "github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
 	
 	"github.com/daarlabs/farah/ui"
 )
@@ -11,13 +12,11 @@ func Icon(props Props) Node {
 		props.Size = ui.Main
 	}
 	return Svg(
-		Clsx{
-			"transition fill-current": true,
-			"w-6 h-6":                 props.Size == "main",
-			"w-4 h-4":                 props.Size == "sm",
-			"w-3 h-3":                 props.Size == "xs",
-			props.Class:               len(props.Class) > 0,
-		},
+		tempest.Class().Transition().FillCurrent().
+			If(props.Size == tempest.SizeMain, tempest.Class().Size(6)).
+			If(props.Size == tempest.SizeSm, tempest.Class().Size(4)).
+			If(props.Size == tempest.SizeXs, tempest.Class().Size(3)).
+			If(props.Class != nil, props.Class),
 		ViewBox("0 0 24 24"),
 		icons[props.Icon],
 	)

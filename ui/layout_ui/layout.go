@@ -3,33 +3,47 @@ package layout_ui
 import (
 	. "github.com/daarlabs/arcanum/gox"
 	"github.com/daarlabs/arcanum/mirage"
-	
-	"github.com/daarlabs/farah/feature/dark_mode_switcher_feature"
+	"github.com/daarlabs/arcanum/tempest"
+	"github.com/daarlabs/farah/component/flash_message_component"
 )
 
 func Layout(c mirage.Ctx, nodes ...Node) Node {
 	title := c.Page().Get().Title()
+	c.Page().Set().Meta(
+		"viewport", "width=device-width, initial-scale=1",
+	)
 	return Html(
 		Head(
 			If(len(title) > 0, Title(Text(title))),
-			If(len(title) == 0, Title(Text("SWTP"))),
+			If(len(title) == 0, Title(Text(c.Config().App.Name))),
+			Raw(
+				`
+				<link rel="apple-touch-icon" sizes="180x180" href="/public/favicon/apple-touch-icon.png">
+				<link rel="icon" type="image/png" sizes="32x32" href="/public/favicon/favicon-32x32.png">
+				<link rel="icon" type="image/png" sizes="16x16" href="/public/favicon/favicon-16x16.png">
+				<link rel="manifest" href="/public/favicon/site.webmanifest">
+				<link rel="mask-icon" href="/public/favicon/safari-pinned-tab.svg" color="#5bbad5">
+				<link rel="shortcut icon" href="/public/favicon/favicon.ico">
+				<meta name="msapplication-TileColor" content="#00aba9">
+				<meta name="msapplication-config" content="/public/favicon/browserconfig.xml">
+				<meta name="theme-color" content="#ffffff">
+			`,
+			),
 			Range(
 				c.Page().Get().Metas(), func(item [2]string, _ int) Node {
 					return Meta(Name(item[0]), Content(item[1]))
 				},
 			),
-			Link(Rel("preconnect"), Href("https://fonts.googleapis.com")),
-			Link(Rel("preconnect"), Href("https://fonts.gstatic.com"), CrossOrigin()),
-			Link(Rel("stylesheet"), Href("https://fonts.googleapis.com/css2?family=Sora:wght@100..800&display=swap")),
 			c.Generate().Assets(),
 		),
 		Body(
 			Clsx{
-				"font-sora": true,
-				"dark":      c.Cookie().Get(dark_mode_switcher_feature.DarkModeCookieKey) == "true",
+				tempest.Class().Dark(): Dark(c),
 			},
+			c.Create().Component(&flash_message_component.FlashMessage{}),
 			Div(
-				Class("transition bg-slate-100 dark:bg-slate-900 overflow-hidden w-screen h-screen"),
+				tempest.Class().Transition().Bg(tempest.Slate, 100).Bg(tempest.Slate, 900, tempest.Dark()).
+					Overflow("hidden").W("screen").H("screen"),
 				Fragment(nodes...),
 			),
 		),

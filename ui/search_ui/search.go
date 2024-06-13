@@ -2,6 +2,10 @@ package search_ui
 
 import (
 	"github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
+	"github.com/daarlabs/farah/palette"
+	"github.com/daarlabs/farah/tempest/form_tempest"
+	"github.com/daarlabs/farah/tempest/util_tempest"
 	
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/farah/ui/form_ui/error_message_ui"
@@ -11,7 +15,7 @@ import (
 
 func Search(props Props, nodes ...gox.Node) gox.Node {
 	return gox.Div(
-		gox.Class("flex flex-col gap-1"),
+		tempest.Class().Flex().FlexCol().Gap(1),
 		gox.If(
 			len(props.Label) > 0,
 			field_label_ui.FieldLabel(
@@ -23,20 +27,35 @@ func Search(props Props, nodes ...gox.Node) gox.Node {
 			),
 		),
 		gox.Div(
-			gox.Class("relative"),
+			tempest.Class().Relative(),
 			gox.Div(
-				gox.Class("absolute size-4 inset-y-0 my-auto left-3"),
-				icon_ui.Icon(icon_ui.Props{Icon: icon_ui.SearchFilter, Class: "text-slate-900 dark:text-white", Size: ui.Sm}),
+				tempest.Class().Absolute().Size(4).InsetY(0).My("auto").Left(3),
+				icon_ui.Icon(
+					icon_ui.Props{
+						Icon: icon_ui.SearchFilter, Class: tempest.Class().TextSlate(900).TextWhite(tempest.Dark()), Size: ui.Sm,
+					},
+				),
 			),
 			gox.Input(
 				gox.If(len(props.Id) > 0, gox.Id(props.Id)),
-				gox.Clsx{
-					"transition w-full border h-10 pl-10 pr-3 rounded text-xs focus:shadow-focus":                      true,
-					"bg-white dark:bg-slate-800 text-slate-900 dark:text-white border-slate-300 dark:border-slate-600": true,
-					"placeholder:text-slate-600 dark:placeholder:text-slate-300":                                       true,
-					"focus:border-primary-400 dark:focus:border-primary-200":                                           true,
-					"is-disabled": props.Disabled,
-				},
+				tempest.Class().
+					H(10).
+					Pr(10).
+					Transition().W("full").Pl(10).Pr(3).Rounded().
+					// Font
+					TextSize(tempest.SizeXs).Text(tempest.Slate, 900).TextWhite(tempest.Dark()).
+					TextSlate(400, tempest.Placeholder()).TextSlate(500, tempest.Placeholder(), tempest.Dark()).
+					// Border
+					Border(1).
+					BorderColor(tempest.Slate, 300).
+					BorderColor(tempest.Slate, 600, tempest.Dark()).
+					BorderColor(palette.Primary, 400, tempest.Focus()).
+					BorderColor(
+						palette.Primary, 200, tempest.Focus(), tempest.Dark(),
+					).
+					Bg(tempest.White, 0).Bg(tempest.Slate, 800, tempest.Dark()).
+					Extend(form_tempest.FocusShadow()).
+					If(props.Disabled, util_tempest.Disabled()),
 				gox.Type("text"),
 				gox.Name(props.Name),
 				gox.Value(props.Value),

@@ -1,10 +1,13 @@
 package page_ui
 
-import "github.com/daarlabs/arcanum/gox"
+import (
+	"github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
+)
 
 func Subtitle(title string) gox.Node {
 	return gox.H1(
-		gox.Class("text-lg font-semibold text-slate-900 dark:text-white mb-4"),
+		tempest.Class().TextLg().FontSemibold().TextSlate(900).TextWhite(tempest.Dark()).Mb(4),
 		gox.Text(title),
 	)
 }

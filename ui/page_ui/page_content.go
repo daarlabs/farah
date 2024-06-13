@@ -2,13 +2,12 @@ package page_ui
 
 import (
 	"github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
 )
 
-func Content(nodes ...gox.Node) gox.Node {
+func Content(props Props, nodes ...gox.Node) gox.Node {
 	return gox.Div(
-		gox.Clsx{
-			"px-6 pb-6": true,
-		},
+		tempest.Class().Px(6).Pb(6).Pt(1).H("full").Overflow("hidden").If(props.Class != nil, props.Class),
 		gox.Fragment(nodes...),
 	)
 }

@@ -1,11 +1,17 @@
 package button_ui
 
-import . "github.com/daarlabs/arcanum/gox"
+import (
+	. "github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
+	"github.com/daarlabs/farah/palette"
+)
 
 func PrimaryButton(props Props, nodes ...Node) Node {
 	return button(
 		props,
-		"bg-primary-400 dark:bg-primary-200 hover:bg-primary-500 dark:hover:bg-primary-300 text-white",
+		tempest.Class().Bg(palette.Primary, 400).Bg(palette.Primary, 200, tempest.Dark()).
+			Bg(palette.Primary, 500, tempest.Hover()).Bg(palette.Primary, 300, tempest.Dark(), tempest.Hover()).
+			TextWhite(),
 		nodes...,
 	)
 }

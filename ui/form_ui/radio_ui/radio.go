@@ -2,6 +2,8 @@ package radio_ui
 
 import (
 	"github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/arcanum/tempest"
+	"github.com/daarlabs/farah/palette"
 	
 	"github.com/daarlabs/farah/ui/form_ui/error_message_ui"
 	"github.com/daarlabs/farah/ui/form_ui/field_label_ui"
@@ -9,7 +11,7 @@ import (
 
 func Radio(props Props) gox.Node {
 	return gox.Div(
-		gox.Class("flex flex-col gap-1"),
+		tempest.Class().Flex().FlexCol().Gap(1),
 		gox.If(
 			len(props.Label) > 0,
 			field_label_ui.FieldLabel(
@@ -21,15 +23,15 @@ func Radio(props Props) gox.Node {
 			),
 		),
 		gox.Div(
-			gox.Class("grid gap-2"),
+			tempest.Class().Grid().Gap(2),
 			gox.Range(
 				props.Options,
 				func(item Option, index int) gox.Node {
 					return gox.Div(
-						gox.Class("flex items-start gap-2"),
+						tempest.Class().Flex().ItemsCenter().Gap(2),
 						gox.Input(
 							gox.If(len(props.Id) > 0, gox.Id(props.Id+"-"+item.Value)),
-							gox.Class("hidden-input peer"),
+							tempest.Class().Invisible().Peer(),
 							gox.Type("radio"),
 							gox.Name(props.Name),
 							gox.Value(item.Value),
@@ -38,13 +40,15 @@ func Radio(props Props) gox.Node {
 						),
 						gox.Label(
 							gox.For(props.Id+"-"+item.Value),
-							gox.Clsx{
-								"group relative flex-none transition border size-4 rounded-full block": true,
-								"bg-transparent border-slate-300 dark:border-slate-600":                true,
-								"peer-checked:border-primary-400 dark:peer-checked:border-primary-200": true,
-							},
+							tempest.Class().Group().Relative().Block().FlexNone().Size(4).RoundedFull().
+								BgTransparent().BorderSlate(300).BorderSlate(600, tempest.Dark()).
+								BorderColor(palette.Primary, 400, tempest.Checked(tempest.Peer)).
+								BorderColor(palette.Primary, 200, tempest.Dark(), tempest.Checked(tempest.Peer)),
 							gox.Div(
-								gox.Class("transition absolute inset-0 m-auto size-1 rounded-full bg-transparent dark:bg-transparent peer-checked:group-[]:bg-primary-400 dark:peer-checked:group-[]:bg-primary-200"),
+								tempest.Class().Transition().Absolute().Inset(0).M("auto").Size(1).RoundedFull().
+									BgTransparent().BgTransparent(tempest.Dark()),
+								// TODO: Peer checked group
+								// gox.Class("peer-checked:group-[]:bg-primary-400 dark:peer-checked:group-[]:bg-primary-200"),
 							),
 						),
 						gox.If(

@@ -1,8 +1,11 @@
 package flash_message_ui
 
 import (
+	"github.com/dchest/uniuri"
+	
+	"github.com/daarlabs/arcanum/alpine"
 	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/stimulus"
+	"github.com/daarlabs/arcanum/tempest"
 	
 	. "github.com/daarlabs/arcanum/gox"
 	
@@ -10,35 +13,57 @@ import (
 	"github.com/daarlabs/farah/ui/icon_ui"
 )
 
+const (
+	autoremoveMessageDelay = "5000"
+)
+
 func Message(fm mirage.Message) Node {
+	id := uniuri.New()
 	return Div(
-		Clsx{
-			"transition relative flex flex-start gap-4 w-full border rounded pl-4 pr-8 py-2 shadow-xl": true,
-			"bg-white dark:bg-slate-800": true,
-			"border-emerald-400 dark:border-emerald-300 text-emerald-600 dark:text-emerald-500": fm.Type == mirage.FlashSuccess,
-			"border-amber-400 text-amber-600 dark:border-amber-300 dark:text-amber-500":         fm.Type == mirage.FlashWarning,
-			"border-red-400 text-red-600 dark:border-red-400 dark:text-red-500":                 fm.Type == mirage.FlashError,
-		},
-		stimulus.Controller("flash-message"),
+		alpine.Data(mirage.Map{}),
+		alpine.Init(`setTimeout(() => $refs['`+id+`'].remove(), `+autoremoveMessageDelay+`)`),
+		alpine.Ref(id),
+		tempest.Class().Transition().Relative().Flex().Gap(4).W("full").
+			BgWhite().BgSlate(800, tempest.Dark()).
+			Border(1).Rounded().Pl(4).Py(2).ShadowXl().
+			If(
+				fm.Type == mirage.FlashSuccess,
+				tempest.Class().BorderEmerald(400).BorderEmerald(300, tempest.Dark()).
+					TextEmerald(600).TextEmerald(500, tempest.Dark()),
+			).
+			If(
+				fm.Type == mirage.FlashWarning,
+				tempest.Class().BorderAmber(400).BorderAmber(300, tempest.Dark()).
+					TextAmber(600).TextAmber(500, tempest.Dark()),
+			).
+			If(
+				fm.Type == mirage.FlashError,
+				tempest.Class().BorderRed(400).BorderRed(400, tempest.Dark()).
+					TextRed(600).TextRed(500, tempest.Dark()),
+			),
 		Div(
-			Class("flex flex-col gap-1"),
+			tempest.Class().Flex().FlexCol().Gap(1),
 			Div(
-				Class("font-bold text-xs"),
+				tempest.Class().FontBold().TextXs(),
 				Text(fm.Title),
 			),
 			If(
 				len(fm.Value) > 0,
 				Div(
-					Class("transition text-slate-600 dark:text-slate-300 text-[10px]"),
+					tempest.Class().Transition().TextSlate(600).TextSlate(300, tempest.Dark()).TextSize("10px"),
 					Text(fm.Value),
 				),
 			),
 		),
 		Button(
+			alpine.Click(`$refs['`+id+`'].remove()`),
+			tempest.Class().Absolute().Top(2).Right(2),
 			Type("button"),
-			Class("absolute top-2 right-2"),
-			stimulus.Action("click", "flash-message", "handleClose"),
-			icon_ui.Icon(icon_ui.Props{Icon: icon_ui.Close, Size: ui.Sm, Class: "text-slate-900 dark:text-white"}),
+			icon_ui.Icon(
+				icon_ui.Props{
+					Icon: icon_ui.Close, Size: ui.Sm, Class: tempest.Class().TextSlate(900).TextWhite(tempest.Dark()),
+				},
+			),
 		),
 	)
 }
