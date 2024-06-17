@@ -15,6 +15,7 @@ type Props[T comparable] struct {
 	Messages    []string
 	Required    bool
 	Size        string
+	Refresh     bool
 	OnChange    func(option select_model.Option[T])
 }
 

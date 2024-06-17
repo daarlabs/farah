@@ -44,6 +44,9 @@ func (c *SelectField[T]) HandleChooseOption() error {
 	if c.Props.OnChange != nil {
 		c.Props.OnChange(select_model.Option[T]{Value: c.Props.Value, Text: c.Props.Text})
 	}
+	if c.Props.Refresh {
+		return c.Response().Refresh()
+	}
 	return c.Response().Render(c.createSelectField(false))
 }
 
@@ -74,6 +77,7 @@ func (c *SelectField[T]) createSelectField(open bool) Node {
 						BgWhite().BgSlate(800, tempest.Dark()).
 						Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
 						BorderColor(palette.Primary, 400, tempest.Focus()).
+						BorderColor(palette.Primary, 200, tempest.Focus(), tempest.Dark()).
 						Extend(form_tempest.FocusShadow()).
 						If(c.Props.Text != "", tempest.Class().TextSlate(900).TextWhite(tempest.Dark())).
 						If(
@@ -122,13 +126,21 @@ func (c *SelectField[T]) createOptions() Node {
 	return Range(
 		c.Options,
 		func(option select_model.Option[T], i int) Node {
+			action := c.Generate().Action("HandleChooseOption", mirage.Map{"value": option.Value, "text": option.Text})
 			return A(
 				tempest.Class().CursorPointer(),
 				menu_ui.Close(),
-				hx.Get(c.Generate().Action("HandleChooseOption", mirage.Map{"value": option.Value, "text": option.Text})),
-				hx.Target(hx.HashId(c.Props.Id)),
-				hx.Swap(hx.SwapOuterHtml),
-				hx.Trigger("click"),
+				If(
+					c.Props.Refresh,
+					Href(action),
+				),
+				If(
+					!c.Props.Refresh,
+					hx.Get(action),
+					hx.Target(hx.HashId(c.Props.Id)),
+					hx.Swap(hx.SwapOuterHtml),
+					hx.Trigger("click"),
+				),
 				menu_item_ui.MenuItem(
 					menu_item_ui.Props{Selected: c.Props.Value == option.Value}, Text(option.Text),
 				),

@@ -32,7 +32,7 @@ func (c *DarkModeSwtitcher) Name() string {
 }
 
 func (c *DarkModeSwtitcher) Mount() {
-	c.dark = c.Cookie().Get(DarkModeCookieKey) == "true"
+	c.dark = Dark(c)
 }
 
 func (c *DarkModeSwtitcher) Node() Node {

@@ -6,14 +6,24 @@ import (
 )
 
 func Box(props Props, nodes ...Node) Node {
+	titleExists := len(props.Title) > 0
 	return Div(
 		tempest.Class().Transition().Rounded().ShadowMain().Overflow("hidden").
 			Grid().
-			If(len(props.Title) > 0, tempest.Class().GridRows("48px 1fr")).
-			If(len(props.Title) == 0, tempest.Class().GridRows(1)).
+			If(titleExists, tempest.Class().GridRows("48px 1fr")).
+			If(!titleExists, tempest.Class().GridRows(1)).
 			BgWhite().BgSlate(800, tempest.Dark()).
 			Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
 			If(props.Class != nil, props.Class),
-		Fragment(nodes...),
+		If(
+			titleExists,
+			Div(
+				tempest.Class().P(4).TextSm().FontSemibold().TextSlate(900).TextWhite(tempest.Dark()),
+				Text(props.Title),
+			),
+		),
+		Div(
+			Fragment(nodes...),
+		),
 	)
 }
