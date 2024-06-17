@@ -11,7 +11,7 @@ import (
 	"github.com/daarlabs/farah/ui/icon_ui"
 )
 
-func button(props Props, variantClass tempest.Tempest, nodes ...Node) Node {
+func CreateButton(props Props, variantClass tempest.Tempest, nodes ...Node) Node {
 	isLink := props.Link != ""
 	el := "button"
 	if isLink {

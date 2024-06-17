@@ -6,7 +6,7 @@ import (
 )
 
 func MainButton(props Props, nodes ...Node) Node {
-	return button(
+	return CreateButton(
 		props,
 		tempest.Class().BgWhite().BgSlate(900, tempest.Dark()).
 			BorderSlate(300).BorderSlate(600, tempest.Dark()).

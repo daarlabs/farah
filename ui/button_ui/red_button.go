@@ -5,10 +5,10 @@ import (
 	"github.com/daarlabs/arcanum/tempest"
 )
 
-func EmeraldButton(props Props, nodes ...Node) Node {
+func RedButton(props Props, nodes ...Node) Node {
 	return CreateButton(
 		props,
-		tempest.Class().BgEmerald(500).BgEmerald(600, tempest.Hover()).TextWhite(),
+		tempest.Class().BgRed(400).BgRed(600, tempest.Hover()).TextWhite(),
 		nodes...,
 	)
 }
