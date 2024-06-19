@@ -7,6 +7,7 @@ import (
 	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/tempest/form_tempest"
+	"github.com/daarlabs/farah/ui/form_ui/hidden_field_ui"
 	
 	. "github.com/daarlabs/arcanum/gox"
 	
@@ -17,7 +18,6 @@ import (
 	"github.com/daarlabs/farah/model/select_model"
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/farah/ui/form_ui/error_message_ui"
-	"github.com/daarlabs/farah/ui/form_ui/hidden_field_ui"
 	"github.com/daarlabs/farah/ui/icon_ui"
 	"github.com/daarlabs/farah/ui/menu_ui"
 	"github.com/daarlabs/farah/ui/menu_ui/menu_item_ui"
@@ -41,7 +41,7 @@ func (c *MultiSelectField[T]) Node() Node {
 }
 
 func (c *MultiSelectField[T]) HandleChooseOption() error {
-	c.Parse().Many().MustQuery("value", &c.Props.Value)
+	c.Parse().Multiple().MustQuery("value", &c.Props.Value)
 	return c.Response().Render(c.createMultiSelectField(true))
 }
 
@@ -61,16 +61,17 @@ func (c *MultiSelectField[T]) createMultiSelectField(open bool) Node {
 				),
 			),
 			Div(
-				tempest.Class().Relative().MinH(2.5),
+				tempest.Class().Relative().MinH(10),
 				menu_ui.Open(),
 				Button(
 					Type("button"),
 					If(len(c.Props.Id) > 0, Id(c.Props.Id)),
-					tempest.Class().Transition().W("full").Py(3).Pl(3).Pr(7).Rounded().MinH(2.5).
+					tempest.Class().Transition().W("full").Py(3).Pl(3).Pr(7).Rounded().MinH(10).
 						TextLeft().TextXs().TextSlate(900).TextWhite(tempest.Dark()).
 						BgWhite().BgSlate(800, tempest.Dark()).
 						Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
 						BorderColor(palette.Primary, 400, tempest.Focus()).
+						BorderColor(palette.Primary, 200, tempest.Focus(), tempest.Dark()).
 						Extend(form_tempest.FocusShadow()),
 					Div(
 						tempest.Class().Flex().FlexWrap().Gap(1),
@@ -135,11 +136,11 @@ func (c *MultiSelectField[T]) removeValue(value T) []T {
 
 func (c *MultiSelectField[T]) createSelectedTag(title string, value T) Node {
 	return Div(
-		tempest.Class().Transition().Flex().ItemsCenter().Rounded().Px(1).Py(0.5).TextSize("10px").
+		tempest.Class().Name(c.Request().Action()).Transition().Flex().ItemsCenter().Rounded().Px(1).Py(0.5).TextSize("10px").
 			Bg(palette.Primary, 400).Bg(palette.Primary, 200, tempest.Dark()).ShadowMain().TextWhite(),
 		Text(title),
 		A(
-			tempest.Class().InlineFlex().Ml(1),
+			tempest.Class().Name(c.Request().Action()).InlineFlex().Ml(1),
 			hx.Get(
 				c.Generate().Action("HandleChooseOption", mirage.Map{"value": c.removeValue(value)}),
 			),

@@ -51,7 +51,7 @@ func (c *MultiAutocomplete[T]) Node() Node {
 
 func (c *MultiAutocomplete[T]) HandleChooseOption() error {
 	c.Parse().MustQuery(mystiq.Fulltext, &c.Props.Text)
-	c.Parse().Many().MustQuery("value", &c.Props.Value)
+	c.Parse().Multiple().MustQuery("value", &c.Props.Value)
 	c.Selected = c.getSelected()
 	c.Options = c.getAll(mystiq.Param{}.Parse(c))
 	return c.Response().Render(c.createMultiAutocomplete(true))
@@ -59,7 +59,7 @@ func (c *MultiAutocomplete[T]) HandleChooseOption() error {
 
 func (c *MultiAutocomplete[T]) HandleSearch() error {
 	c.Parse().MustQuery(mystiq.Fulltext, &c.Props.Text)
-	c.Parse().Many().MustQuery("value", &c.Props.Value)
+	c.Parse().Multiple().MustQuery("value", &c.Props.Value)
 	c.Selected = c.getSelected()
 	c.Options = c.getAll(mystiq.Param{Fulltext: c.Props.Text})
 	c.Offset = 0
@@ -78,8 +78,8 @@ func (c *MultiAutocomplete[T]) HandleLoadMore() error {
 
 func (c *MultiAutocomplete[T]) getAll(param mystiq.Param) []select_model.Option[T] {
 	result := make([]select_model.Option[T], 0)
-	param.Columns.Fulltext = []string{quirk.Vectors}
-	param.Columns.Order = map[string]string{c.Query.Alias: c.Query.Name}
+	param.Fields.Fulltext = []string{quirk.Vectors}
+	param.Fields.Order = map[string]string{c.Query.Alias: c.Query.Value}
 	q := mystiq.New()
 	if c.Query.CanUse() {
 		q = q.DB(c.DB(), c.Query)
@@ -104,7 +104,7 @@ func (c *MultiAutocomplete[T]) getSelected() []select_model.Option[T] {
 		q = q.Data(select_model.ConvertToMapSlice(c.Options))
 	}
 	
-	q.MustGetMany(c.Query.Name, c.Props.Value, &result)
+	q.MustGetMany(c.Query.Value, c.Props.Value, &result)
 	return result
 }
 

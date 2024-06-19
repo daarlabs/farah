@@ -7,7 +7,7 @@ import (
 
 func Content(props Props, nodes ...gox.Node) gox.Node {
 	return gox.Div(
-		tempest.Class().Px(6).Pb(6).Pt(1).H("full").Overflow("hidden").If(props.Class != nil, props.Class),
+		tempest.Class().Px(6).Pb(6).Pt(1).H("full").If(props.Class != nil, props.Class),
 		gox.Fragment(nodes...),
 	)
 }

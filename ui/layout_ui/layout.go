@@ -8,11 +8,13 @@ import (
 )
 
 func Layout(c mirage.Ctx, nodes ...Node) Node {
+	currentLang := c.Lang().Current()
 	title := c.Page().Get().Title()
 	c.Page().Set().Meta(
 		"viewport", "width=device-width, initial-scale=1",
 	)
 	return Html(
+		If(len(currentLang) > 0, Lang(currentLang)),
 		Head(
 			If(len(title) > 0, Title(Text(title))),
 			If(len(title) == 0, Title(Text(c.Config().App.Name))),

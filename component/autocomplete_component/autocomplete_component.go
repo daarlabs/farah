@@ -187,8 +187,8 @@ func (c *Autocomplete[T]) createOptions() Node {
 
 func (c *Autocomplete[T]) getAll(param mystiq.Param) []select_model.Option[T] {
 	result := make([]select_model.Option[T], 0)
-	param.Columns.Fulltext = []string{quirk.Vectors}
-	param.Columns.Order = map[string]string{c.Query.Alias: c.Query.Name}
+	param.Fields.Fulltext = []string{quirk.Vectors}
+	param.Fields.Order = map[string]string{c.Query.Alias: c.Query.Value}
 	q := mystiq.New()
 	if len(c.Options) == 0 && c.Query.CanUse() {
 		q = q.DB(c.DB(), c.Query)
@@ -209,6 +209,6 @@ func (c *Autocomplete[T]) getOne() select_model.Option[T] {
 	if len(c.Options) > 0 {
 		q = q.Data(select_model.ConvertToMapSlice(c.Options))
 	}
-	q.MustGetOne(c.Query.Name, c.Props.Value, &result)
+	q.MustGetOne(c.Query.Value, c.Props.Value, &result)
 	return result
 }
