@@ -18,6 +18,7 @@ func Layout(c mirage.Ctx, nodes ...Node) Node {
 		Head(
 			If(len(title) > 0, Title(Text(title))),
 			If(len(title) == 0, Title(Text(c.Config().App.Name))),
+			Meta(CharSet("utf-8")),
 			Raw(
 				`
 				<link rel="apple-touch-icon" sizes="180x180" href="/public/favicon/apple-touch-icon.png">
