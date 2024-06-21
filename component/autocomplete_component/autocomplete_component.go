@@ -10,7 +10,6 @@ import (
 	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/tempest/form_tempest/form_input_tempest"
-	"github.com/daarlabs/farah/ui/form_ui"
 	
 	. "github.com/daarlabs/arcanum/gox"
 	
@@ -42,7 +41,9 @@ func (c *Autocomplete[T]) Name() string {
 
 func (c *Autocomplete[T]) Mount() {
 	if !c.Request().Is().Action() {
-		c.Options = c.getAll(mystiq.Param{}.Parse(c))
+		c.Options = c.getAll(
+			mystiq.Param{}.Parse(c),
+		)
 	}
 	if !reflect.ValueOf(c.Props.Value).IsZero() && c.Props.Text == "" {
 		c.Props.Text = c.getOne().Text
@@ -111,7 +112,6 @@ func (c *Autocomplete[T]) createHandler() Node {
 				Type("text"),
 				Value(c.Props.Text),
 				Name("fulltext"),
-				form_ui.Autofocus(),
 				hx.Get(c.Generate().Action("HandleSearch", c.Param)),
 				hx.Trigger("input delay:500ms"),
 				hx.Swap(hx.SwapOuterHtml),
@@ -187,8 +187,12 @@ func (c *Autocomplete[T]) createOptions() Node {
 
 func (c *Autocomplete[T]) getAll(param mystiq.Param) []select_model.Option[T] {
 	result := make([]select_model.Option[T], 0)
+	param.Order = []string{"text:" + mystiq.Asc}
 	param.Fields.Fulltext = []string{quirk.Vectors}
-	param.Fields.Order = map[string]string{c.Query.Alias: c.Query.Value}
+	textField, ok := c.Query.Fields["text"]
+	if ok {
+		param.Fields.Order = map[string]string{"text": textField}
+	}
 	q := mystiq.New()
 	if len(c.Options) == 0 && c.Query.CanUse() {
 		q = q.DB(c.DB(), c.Query)
@@ -203,12 +207,7 @@ func (c *Autocomplete[T]) getAll(param mystiq.Param) []select_model.Option[T] {
 func (c *Autocomplete[T]) getOne() select_model.Option[T] {
 	var result select_model.Option[T]
 	q := mystiq.New()
-	if len(c.Options) == 0 && c.Query.CanUse() {
-		q = q.DB(c.DB(), c.Query)
-	}
-	if len(c.Options) > 0 {
-		q = q.Data(select_model.ConvertToMapSlice(c.Options))
-	}
+	q = q.DB(c.DB(), c.Query)
 	q.MustGetOne(c.Query.Value, c.Props.Value, &result)
 	return result
 }

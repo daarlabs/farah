@@ -27,7 +27,15 @@ func EmailField(props Props) Node {
 			If(len(props.Id) > 0, Id(props.Id)),
 			tempest.Class().
 				H(10).
-				Extend(form_input_tempest.InputField(form_input_tempest.Props{Boxed: props.Boxed})).
+				Extend(
+					form_input_tempest.InputField(
+						form_input_tempest.Props{
+							Text:        props.Value,
+							Placeholder: props.Placeholder,
+							Boxed:       props.Boxed,
+						},
+					),
+				).
 				Extend(form_tempest.FocusShadow()).
 				If(props.Disabled, util_tempest.Disabled()),
 			Type(TypeEmail),

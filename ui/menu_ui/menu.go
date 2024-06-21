@@ -37,8 +37,8 @@ func Menu(props Props, handler gox.Node, nodes ...gox.Node) gox.Node {
 			),
 			alpine.Class(
 				map[string]string{
-					tempest.Class().Invisible().Opacity(0).Scale(95).String(): "!open",
-					tempest.Class().Visible().Opacity(1).Scale(100).String():  "open",
+					tempest.Class().Invisible().Opacity(0).Scale(95).H(0).String(): "!open",
+					tempest.Class().Visible().Opacity(1).Scale(100).String():       "open",
 				},
 			),
 			tempest.Class().Transition().Absolute().Z(40).OverflowY("auto").Rounded().ShadowLg().
@@ -46,7 +46,7 @@ func Menu(props Props, handler gox.Node, nodes ...gox.Node) gox.Node {
 				Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
 				If(!props.Autoheight, tempest.Class().MinH("200px")).
 				If(props.Scrollable, tempest.Class().MaxH("200px")).
-				If(!props.Open, tempest.Class().Invisible().Opacity(0).Scale(95)).
+				If(!props.Open, tempest.Class().Invisible().Opacity(0).Scale(95)).H(0).
 				If(props.Open, tempest.Class().Visible().Opacity(1).Scale(100)).
 				If(props.PositionY == ui.Bottom, tempest.Class().Top("full")).
 				If(props.PositionX == ui.Right, tempest.Class().Right(0)).

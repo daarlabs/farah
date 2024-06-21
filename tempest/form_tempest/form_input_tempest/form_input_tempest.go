@@ -6,9 +6,17 @@ import (
 )
 
 func InputField(props Props) tempest.Tempest {
+	textExists := len(props.Text) > 0
+	placeholderExists := len(props.Placeholder) > 0
 	return tempest.Class().Transition().W("full").Px(3).Rounded().
 		// Font
-		TextSize(tempest.SizeXs).Text(tempest.Slate, 900).TextWhite(tempest.Dark()).
+		TextSize(tempest.SizeXs).
+		If(textExists || !placeholderExists, tempest.Class().TextSlate(900).TextWhite(tempest.Dark())).
+		If(!textExists && !placeholderExists, tempest.Class().TextSlate(900).TextWhite(tempest.Dark())).
+		If(
+			!textExists && placeholderExists,
+			tempest.Class().TextSlate(600).TextSlate(400, tempest.Dark()),
+		).
 		// Border
 		Border(1).
 		BorderColor(tempest.Slate, 300).

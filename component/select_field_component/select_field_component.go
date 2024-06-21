@@ -1,10 +1,12 @@
 package select_field_component
 
 import (
+	"reflect"
+	
 	"github.com/daarlabs/arcanum/mirage"
 	"github.com/daarlabs/arcanum/tempest"
-	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/tempest/form_tempest"
+	"github.com/daarlabs/farah/tempest/form_tempest/form_input_tempest"
 	
 	. "github.com/daarlabs/arcanum/gox"
 	
@@ -32,6 +34,14 @@ func (c *SelectField[T]) Name() string {
 }
 
 func (c *SelectField[T]) Mount() {
+	if !reflect.ValueOf(c.Props.Value).IsZero() && c.Props.Text == "" {
+		for _, option := range c.Options {
+			if c.Props.Value == option.Value {
+				c.Props.Text = option.Text
+				break
+			}
+		}
+	}
 }
 
 func (c *SelectField[T]) Node() Node {
@@ -72,18 +82,18 @@ func (c *SelectField[T]) createSelectField(open bool) Node {
 				Button(
 					If(len(c.Props.Id) > 0, Id(c.Props.Id)),
 					Type("button"),
-					tempest.Class().Transition().W("full").H(handlerHeight).Pl(3).Pr(7).Rounded().
-						TextSize("10px").TextLeft().
-						BgWhite().BgSlate(800, tempest.Dark()).
-						Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
-						BorderColor(palette.Primary, 400, tempest.Focus()).
-						BorderColor(palette.Primary, 200, tempest.Focus(), tempest.Dark()).
-						Extend(form_tempest.FocusShadow()).
-						If(c.Props.Text != "", tempest.Class().TextSlate(900).TextWhite(tempest.Dark())).
-						If(
-							c.Props.Text == "" && c.Props.Placeholder != "",
-							tempest.Class().TextSlate(400).TextSlate(200, tempest.Dark()),
-						),
+					tempest.Class().
+						H(handlerHeight).
+						TextLeft().
+						Extend(
+							form_input_tempest.InputField(
+								form_input_tempest.Props{
+									Text:        c.Props.Text,
+									Placeholder: c.Props.Placeholder,
+								},
+							),
+						).
+						Extend(form_tempest.FocusShadow()),
 					If(c.Props.Text == "" && c.Props.Placeholder != "", Text(c.Props.Placeholder)),
 					If(c.Props.Text != "", Text(c.Props.Text)),
 				),

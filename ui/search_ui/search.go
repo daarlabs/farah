@@ -1,11 +1,13 @@
 package search_ui
 
 import (
+	"github.com/daarlabs/arcanum/alpine"
 	"github.com/daarlabs/arcanum/gox"
 	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/tempest/util_tempest"
+	"github.com/daarlabs/farah/ui/spinner_ui"
 	
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/farah/ui/form_ui/error_message_ui"
@@ -28,6 +30,7 @@ func Search(props Props, nodes ...gox.Node) gox.Node {
 		),
 		gox.Div(
 			tempest.Class().Relative(),
+			alpine.Data(map[string]any{"typing": false}),
 			gox.Div(
 				tempest.Class().Absolute().Size(4).InsetY(0).My("auto").Left(3),
 				icon_ui.Icon(
@@ -41,7 +44,7 @@ func Search(props Props, nodes ...gox.Node) gox.Node {
 				tempest.Class().
 					H(10).
 					Pr(10).
-					Transition().W("full").Pl(10).Pr(3).Rounded().
+					Transition().W("full").Px(10).Rounded().
 					// Font
 					TextSize(tempest.SizeXs).Text(tempest.Slate, 900).TextWhite(tempest.Dark()).
 					TextSlate(400, tempest.Placeholder()).TextSlate(500, tempest.Placeholder(), tempest.Dark()).
@@ -63,6 +66,13 @@ func Search(props Props, nodes ...gox.Node) gox.Node {
 				gox.If(props.Disabled, gox.Disabled()),
 				gox.If(props.Autofocus, gox.AutoFocus()),
 				gox.Fragment(nodes...),
+				alpine.Input("typing = true"),
+			),
+			spinner_ui.Spinner(
+				spinner_ui.Props{},
+				tempest.Class().Absolute().H(5).Right(3).InsetY(0).My("auto"),
+				alpine.Show("typing"),
+				alpine.Cloak(),
 			),
 		),
 		gox.Range(

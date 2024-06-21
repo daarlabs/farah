@@ -11,6 +11,7 @@ import (
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/ui/box_ui"
 	"github.com/daarlabs/farah/ui/form_ui"
+	"github.com/daarlabs/farah/ui/spinner_ui"
 	
 	"github.com/daarlabs/arcanum/hx"
 	"github.com/daarlabs/farah/ui"
@@ -128,7 +129,7 @@ func (c *Datatable[T]) createHead() Node {
 					el = "div"
 				}
 				return CreateElement(el)(
-					tempest.Class().Transition().Flex().ItemsCenter().Gap(1).H("full").Px(4).CursorPointer().
+					tempest.Class().Relative().Transition().Flex().ItemsCenter().Gap(1).H("full").Px(4).CursorPointer().
 						TextXs().FontSemibold().TextSlate(900).TextWhite(tempest.Dark()).
 						BgSlate(100, tempest.Hover()).BgSlate(700, tempest.Dark(), tempest.Hover()).
 						If(field.AlignX == ui.Left, tempest.Class().JustifyStart()).
@@ -137,6 +138,9 @@ func (c *Datatable[T]) createHead() Node {
 					Text(field.Title),
 					If(
 						field.Sortable,
+						spinner_ui.Spinner(
+							spinner_ui.Props{Overlay: true, Class: tempest.Class(spinner_ui.Indicator)},
+						),
 						c.createOrder(mirage.Map{mystiq.Fulltext: c.Param.Fulltext, mystiq.Order: c.createNextOrder(field.Name)}),
 						If(
 							slices.Contains(c.Param.Order, field.Name+":"+mystiq.Asc),
@@ -158,7 +162,6 @@ func (c *Datatable[T]) createHead() Node {
 								},
 							),
 						),
-					
 					),
 				)
 			},
@@ -260,6 +263,7 @@ func (c *Datatable[T]) createLoadMore() Node {
 	param := mirage.Map{
 		mystiq.Offset:   c.Param.Offset + mystiq.DefaultLimit,
 		mystiq.Fulltext: c.Param.Fulltext,
+		mystiq.Order:    c.Param.Order,
 	}
 	return Fragment(
 		hx.Get(c.Generate().Action("HandleLoadMore", param)),
