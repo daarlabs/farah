@@ -12,7 +12,11 @@ const (
 
 func Valid(c mirage.Ctx) (bool, error) {
 	if c.Request().Is().Get() {
-		return true, nil
+		valid := true
+		if err := c.State().Get(captchaCacheKey, &valid); err != nil {
+			return valid, err
+		}
+		return valid, nil
 	}
 	var r captcha
 	challengeToken := c.Request().Form().Get(captchaChallenge)
@@ -24,7 +28,7 @@ func Valid(c mirage.Ctx) (bool, error) {
 	if err := c.Cache().Set(captchaCacheKey+":"+challengeToken, "", time.Millisecond); err != nil {
 		return isValid, err
 	}
-	return isValid, nil
+	return isValid, c.State().Save(captchaCacheKey, isValid)
 }
 
 func MustValid(c mirage.Ctx) bool {

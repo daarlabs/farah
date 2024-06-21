@@ -134,9 +134,9 @@ func (c *Captcha) GetImg() error {
 
 func (c *Captcha) createCaptcha(state int, randomRange []int) Node {
 	return Div(
-		tempest.Class().Grid().Gap(1),
 		Div(
 			Id(hx.Id("captcha")),
+			tempest.Class().Grid().Gap(1),
 			Div(
 				tempest.Class().Transition().Grid().PlaceItems("center").
 					W("full").MinH(20).P(4).Rounded().
