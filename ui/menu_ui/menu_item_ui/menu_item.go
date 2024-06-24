@@ -9,6 +9,7 @@ import (
 func MenuItem(props Props, nodes ...Node) Node {
 	return Div(
 		tempest.Class().Transition().Px(4).Py(2).TextXs().
+			Flex().ItemsCenter().Gap(2).
 			BorderB(1).BorderSlate(200).BorderSlate(700, tempest.Dark()).
 			If(
 				!props.Selected,

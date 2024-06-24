@@ -29,6 +29,7 @@ func TextArea(props Props) Node {
 		Textarea(
 			If(len(props.Id) > 0, Id(props.Id)),
 			tempest.Class().MinH("200px").
+				Py(3).
 				Extend(form_input_tempest.InputField(form_input_tempest.Props{Boxed: props.Boxed})).
 				Extend(form_tempest.FocusShadow()).
 				If(props.Disabled, util_tempest.Disabled()),

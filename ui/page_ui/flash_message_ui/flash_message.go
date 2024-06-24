@@ -25,7 +25,7 @@ func Message(fm mirage.Message) Node {
 		alpine.Ref(id),
 		tempest.Class().Transition().Relative().Flex().Gap(4).W("full").
 			BgWhite().BgSlate(800, tempest.Dark()).
-			Border(1).Rounded().Pl(4).Py(2).ShadowXl().
+			Border(1).Rounded().Px(4).Py(2).ShadowXl().
 			If(
 				fm.Type == mirage.FlashSuccess,
 				tempest.Class().BorderEmerald(400).BorderEmerald(300, tempest.Dark()).
@@ -50,7 +50,8 @@ func Message(fm mirage.Message) Node {
 			If(
 				len(fm.Value) > 0,
 				Div(
-					tempest.Class().Transition().TextSlate(600).TextSlate(300, tempest.Dark()).TextSize("10px"),
+					tempest.Class().Transition().TextSlate(600).TextSlate(300, tempest.Dark()).
+						TextSize("10px").LhRelax(),
 					Text(fm.Value),
 				),
 			),

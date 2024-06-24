@@ -83,7 +83,7 @@ func (c *DarkModeSwtitcher) createIcon(icon string) Node {
 
 func (c *DarkModeSwtitcher) HandleSwitch() error {
 	c.Cookie().Set(DarkModeCookieKey, strconv.FormatBool(!c.dark), darkModeCookieDuration)
-	return c.Response().Refresh()
+	return c.Response().Redirect(c.Generate().Current())
 }
 
 func (c *DarkModeSwtitcher) getMenuItemTitle() string {

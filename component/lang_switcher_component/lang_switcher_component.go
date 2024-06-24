@@ -31,7 +31,7 @@ func (c *LangSwitcher) Node() Node {
 	langsNodes := make([]Node, len(langs))
 	for i, lang := range langs {
 		langsNodes[i] = A(
-			Href(c.Generate().Query(mirage.Map{"lang": lang.Code})),
+			Href(c.Generate().Current(mirage.Map{"lang": lang.Code})),
 			menu_item_ui.MenuItem(
 				menu_item_ui.Props{
 					Selected: lang.Code == currentLang,
@@ -49,7 +49,7 @@ func (c *LangSwitcher) Node() Node {
 		Button(
 			Type("button"),
 			menu_ui.Open(),
-			tempest.Class().Transition().W(4).H(3.5).
+			tempest.Class().Block().Transition().W("16px").H("11px").My("auto").
 				Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()),
 			c.getFlag(currentLang),
 		),

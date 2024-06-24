@@ -7,7 +7,7 @@ import (
 
 func Title(title string) gox.Node {
 	return gox.H1(
-		tempest.Class().TextLg().FontBold().TextSlate(900).TextWhite(tempest.Dark()).Mb(6),
+		tempest.Class().TextLg().FontBold().TextSlate(900).TextWhite(tempest.Dark()).Mb(4),
 		gox.Text(title),
 	)
 }

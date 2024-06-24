@@ -25,3 +25,8 @@ func CreateProps(field form.Field[string]) Props {
 		Required: field.Required,
 	}
 }
+
+func (p Props) Box() Props {
+	p.Boxed = true
+	return p
+}
