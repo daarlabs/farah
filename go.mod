@@ -3,14 +3,16 @@ module github.com/daarlabs/farah
 go 1.22
 
 require (
-	github.com/daarlabs/arcanum v0.1.6
+	github.com/daarlabs/arcanum v0.2.0
 	github.com/dchest/uniuri v1.2.0
 	github.com/iancoleman/strcase v0.3.0
 	golang.org/x/exp v0.0.0-20240506185415-9bf2ced13842
 )
 
 require (
+	github.com/Boostport/mjml-go v0.14.6 // indirect
 	github.com/BurntSushi/toml v1.3.2 // indirect
+	github.com/andybalholm/brotli v1.1.0 // indirect
 	github.com/boombuler/barcode v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/davecgh/go-spew v1.1.1 // indirect
@@ -18,6 +20,8 @@ require (
 	github.com/dustin/go-humanize v1.0.1 // indirect
 	github.com/go-redis/redis/v8 v8.11.5 // indirect
 	github.com/google/uuid v1.5.0 // indirect
+	github.com/gorilla/websocket v1.5.1 // indirect
+	github.com/jackc/puddle/v2 v2.2.1 // indirect
 	github.com/json-iterator/go v1.1.12 // indirect
 	github.com/klauspost/compress v1.17.4 // indirect
 	github.com/klauspost/cpuid/v2 v2.2.6 // indirect
@@ -36,12 +40,14 @@ require (
 	github.com/rs/xid v1.5.0 // indirect
 	github.com/sirupsen/logrus v1.9.3 // indirect
 	github.com/stretchr/testify v1.9.0 // indirect
+	github.com/tetratelabs/wazero v1.6.0 // indirect
 	github.com/thanhpk/randstr v1.0.6 // indirect
 	github.com/xuri/efp v0.0.0-20231025114914-d1ff6096ae53 // indirect
 	github.com/xuri/excelize/v2 v2.8.1 // indirect
 	github.com/xuri/nfp v0.0.0-20230919160717-d98342af3f05 // indirect
 	golang.org/x/crypto v0.23.0 // indirect
 	golang.org/x/net v0.25.0 // indirect
+	golang.org/x/sync v0.7.0 // indirect
 	golang.org/x/sys v0.20.0 // indirect
 	golang.org/x/text v0.15.0 // indirect
 	gopkg.in/ini.v1 v1.67.0 // indirect

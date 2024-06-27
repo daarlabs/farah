@@ -37,7 +37,7 @@ func Layout(c mirage.Ctx, nodes ...Node) Node {
 					return Meta(Name(item[0]), Content(item[1]))
 				},
 			),
-			c.Generate().Assets(),
+			c.Generate().Assets(c.Request().Name()),
 		),
 		Body(
 			Clsx{
