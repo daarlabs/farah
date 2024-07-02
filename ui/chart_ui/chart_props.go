@@ -9,4 +9,5 @@ type Props struct {
 	DataX  any
 	DataY  any
 	Config mirage.Map
+	Height int
 }

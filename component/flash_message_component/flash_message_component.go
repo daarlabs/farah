@@ -13,7 +13,7 @@ type FlashMessage struct {
 }
 
 const (
-	id = "flash-messages"
+	TargetId = "flash-messages"
 )
 
 func (c *FlashMessage) Name() string {
@@ -33,7 +33,7 @@ func (c *FlashMessage) HandleRefresh() error {
 
 func (c *FlashMessage) createFlashMessages() Node {
 	return Div(
-		Id(hx.Id(id)),
+		Id(hx.Id(TargetId)),
 		tempest.Class().Fixed().Grid().Gap(4).Top(8).Right(8).W("200px").Z(9999),
 		Range(
 			c.Flash().MustGet(), func(item mirage.Message, _ int) Node {

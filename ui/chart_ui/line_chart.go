@@ -9,7 +9,8 @@ func LineChart(props Props) Node {
 	props.Config = mergeConfig(
 		mirage.Map{
 			"chart": mirage.Map{
-				"type": "line",
+				"type":   "line",
+				"height": props.Height,
 			},
 		},
 		createConfig(props),

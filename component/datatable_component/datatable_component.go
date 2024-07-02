@@ -244,7 +244,7 @@ func (c *Datatable[T]) createFulltext() Node {
 	return Fragment(
 		form_ui.Autofocus(),
 		hx.Get(c.Generate().Action("HandleSearch")),
-		hx.Trigger("input delay:500ms"),
+		hx.Trigger("input delay:300ms"),
 		hx.Swap(hx.SwapOuterHtml),
 		hx.Target(hx.HashId(c.Props.Name)),
 	)
