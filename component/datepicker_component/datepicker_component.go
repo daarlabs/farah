@@ -4,24 +4,24 @@ import (
 	"fmt"
 	"time"
 	
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/ui/icon_ui"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 	
-	. "github.com/daarlabs/arcanum/gox"
+	. "github.com/daarlabs/hirokit/gox"
 	
-	"github.com/daarlabs/arcanum/hx"
 	"github.com/daarlabs/farah/ui/form_ui/field_label_ui"
 	"github.com/daarlabs/farah/ui/form_ui/hidden_field_ui"
+	"github.com/daarlabs/hirokit/hx"
 	
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/farah/ui/menu_ui"
 )
 
 type Datepicker struct {
-	mirage.Component
+	hiro.Component
 	Props Props `json:"-"`
 	
 	currentDay       int
@@ -188,7 +188,7 @@ func (c *Datepicker) createMonthPicker() Node {
 				BgWhite().BgSlate(800, tempest.Dark()).
 				Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()),
 			Name(monthKey),
-			hx.Get(c.Generate().Action("HandleSelectParameter", mirage.Map{dayKey: day, yearKey: year})),
+			hx.Get(c.Generate().Action("HandleSelectParameter", hiro.Map{dayKey: day, yearKey: year})),
 			hx.Trigger("change"),
 			hx.Swap(hx.SwapOuterHtml),
 			hx.Target(hx.HashId(c.Props.Id)),
@@ -218,7 +218,7 @@ func (c *Datepicker) createYearPicker() Node {
 				BgWhite().BgSlate(800, tempest.Dark()).
 				Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()),
 			Name(yearKey),
-			hx.Get(c.Generate().Action("HandleSelectParameter", mirage.Map{dayKey: day, monthKey: int(month)})),
+			hx.Get(c.Generate().Action("HandleSelectParameter", hiro.Map{dayKey: day, monthKey: int(month)})),
 			hx.Trigger("change"),
 			hx.Swap(hx.SwapOuterHtml),
 			hx.Target(hx.HashId(c.Props.Id)),
@@ -277,7 +277,7 @@ func (c *Datepicker) createBodyDays() Node {
 				!isActive,
 				hx.Get(
 					c.Generate().Action(
-						"HandleSelectDay", mirage.Map{dayKey: i + 1 - firstDayPosition, monthKey: int(month), yearKey: year},
+						"HandleSelectDay", hiro.Map{dayKey: i + 1 - firstDayPosition, monthKey: int(month), yearKey: year},
 					),
 				),
 				menu_ui.Close(),

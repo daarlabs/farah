@@ -1,8 +1,8 @@
 package form_tempest
 
 import (
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/palette"
+	"github.com/daarlabs/hirokit/tempest"
 )
 
 func FocusShadow() tempest.Tempest {

@@ -4,32 +4,33 @@ import (
 	"slices"
 	"strings"
 	
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/mystiq"
-	"github.com/daarlabs/arcanum/quirk"
-	"github.com/daarlabs/arcanum/tempest"
+	"github.com/daarlabs/hirokit/dyna"
+	
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/ui/box_ui"
 	"github.com/daarlabs/farah/ui/form_ui"
 	"github.com/daarlabs/farah/ui/spinner_ui"
+	"github.com/daarlabs/hirokit/esquel"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 	
-	"github.com/daarlabs/arcanum/hx"
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/farah/ui/icon_ui"
 	"github.com/daarlabs/farah/ui/search_ui"
+	"github.com/daarlabs/hirokit/hx"
 	
-	. "github.com/daarlabs/arcanum/gox"
+	. "github.com/daarlabs/hirokit/gox"
 )
 
 type Datatable[T any] struct {
-	mirage.Component
-	Props       Props                                 `json:"-"`
-	Param       mystiq.Param                          `json:"-"`
-	Query       mystiq.Query                          `json:"-"`
-	GetDataFunc func(param mystiq.Param, t any) error `json:"-"`
-	FieldsFunc  func() []Field                        `json:"-"`
-	RowFunc     func(builder RowBuilder[T]) Node      `json:"-"`
-	Data        []T                                   `json:"-"`
+	hiro.Component
+	Props       Props                               `json:"-"`
+	Param       dyna.Param                          `json:"-"`
+	Query       dyna.Query                          `json:"-"`
+	GetDataFunc func(param dyna.Param, t any) error `json:"-"`
+	FieldsFunc  func() []Field                      `json:"-"`
+	RowFunc     func(builder RowBuilder[T]) Node    `json:"-"`
+	Data        []T                                 `json:"-"`
 	
 	fields []Field
 }
@@ -73,9 +74,9 @@ func (c *Datatable[T]) HandleLoadMore() error {
 func (c *Datatable[T]) getData() []T {
 	param := c.Param
 	result := make([]T, 0)
-	param.Fields.Fulltext = []string{quirk.Vectors}
+	param.Fields.Fulltext = []string{esquel.Vectors}
 	param.Fields.Order = c.Query.Fields
-	q := mystiq.New()
+	q := dyna.New()
 	if c.GetDataFunc != nil {
 		q = q.GetAllFunc(c.GetDataFunc)
 	}
@@ -97,8 +98,8 @@ func (c *Datatable[T]) createDatatable() Node {
 			tempest.Class().MaxW("300px"),
 			search_ui.Search(
 				search_ui.Props{
-					Placeholder: "Search", Value: c.Param.Fulltext, Name: mystiq.Fulltext,
-					Id: hx.Id(c.Props.Name + "-" + mystiq.Fulltext),
+					Placeholder: "Search", Value: c.Param.Fulltext, Name: dyna.Fulltext,
+					Id: hx.Id(c.Props.Name + "-" + dyna.Fulltext),
 				},
 				c.createFulltext(),
 			),
@@ -141,9 +142,9 @@ func (c *Datatable[T]) createHead() Node {
 						spinner_ui.Spinner(
 							spinner_ui.Props{Overlay: true, Class: tempest.Class(spinner_ui.Indicator)},
 						),
-						c.createOrder(mirage.Map{mystiq.Fulltext: c.Param.Fulltext, mystiq.Order: c.createNextOrder(field.Name)}),
+						c.createOrder(hiro.Map{dyna.Fulltext: c.Param.Fulltext, dyna.Order: c.createNextOrder(field.Name)}),
 						If(
-							slices.Contains(c.Param.Order, field.Name+":"+mystiq.Asc),
+							slices.Contains(c.Param.Order, field.Name+":"+dyna.Asc),
 							icon_ui.Icon(
 								icon_ui.Props{
 									Icon:  icon_ui.ChevronUp,
@@ -153,7 +154,7 @@ func (c *Datatable[T]) createHead() Node {
 							),
 						),
 						If(
-							slices.Contains(c.Param.Order, field.Name+":"+mystiq.Desc),
+							slices.Contains(c.Param.Order, field.Name+":"+dyna.Desc),
 							icon_ui.Icon(
 								icon_ui.Props{
 									Icon:  icon_ui.ChevronDown,
@@ -185,7 +186,7 @@ func (c *Datatable[T]) createRows() Node {
 			c.Data,
 			func(item T, index int) Node {
 				var loadMore Node
-				if (index+1)%mystiq.DefaultLimit == 0 {
+				if (index+1)%dyna.DefaultLimit == 0 {
 					loadMore = c.createLoadMore()
 				}
 				return c.RowFunc(
@@ -208,7 +209,7 @@ func (c *Datatable[T]) createNextOrder(name string) []string {
 		}
 	}
 	if !exist {
-		return append(c.Param.Order, name+":"+mystiq.Asc)
+		return append(c.Param.Order, name+":"+dyna.Asc)
 	}
 	if exist {
 		for _, o := range c.Param.Order {
@@ -218,8 +219,8 @@ func (c *Datatable[T]) createNextOrder(name string) []string {
 				continue
 			}
 			if isName {
-				if strings.HasSuffix(o, mystiq.Asc) {
-					result = append(result, strings.Replace(o, mystiq.Asc, mystiq.Desc, 1))
+				if strings.HasSuffix(o, dyna.Asc) {
+					result = append(result, strings.Replace(o, dyna.Asc, dyna.Desc, 1))
 				}
 				continue
 			}
@@ -250,7 +251,7 @@ func (c *Datatable[T]) createFulltext() Node {
 	)
 }
 
-func (c *Datatable[T]) createOrder(param mirage.Map) Node {
+func (c *Datatable[T]) createOrder(param hiro.Map) Node {
 	return Fragment(
 		hx.Get(c.Generate().Action("HandleOrder", param)),
 		hx.Trigger("click"),
@@ -260,10 +261,10 @@ func (c *Datatable[T]) createOrder(param mirage.Map) Node {
 }
 
 func (c *Datatable[T]) createLoadMore() Node {
-	param := mirage.Map{
-		mystiq.Offset:   c.Param.Offset + mystiq.DefaultLimit,
-		mystiq.Fulltext: c.Param.Fulltext,
-		mystiq.Order:    c.Param.Order,
+	param := hiro.Map{
+		dyna.Offset:   c.Param.Offset + dyna.DefaultLimit,
+		dyna.Fulltext: c.Param.Fulltext,
+		dyna.Order:    c.Param.Order,
 	}
 	return Fragment(
 		hx.Get(c.Generate().Action("HandleLoadMore", param)),

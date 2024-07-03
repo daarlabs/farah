@@ -1,8 +1,8 @@
 package form_input_tempest
 
 import (
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/palette"
+	"github.com/daarlabs/hirokit/tempest"
 )
 
 func InputField(props Props) tempest.Tempest {

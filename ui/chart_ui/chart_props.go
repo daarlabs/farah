@@ -1,6 +1,6 @@
 package chart_ui
 
-import "github.com/daarlabs/arcanum/mirage"
+import "github.com/daarlabs/hirokit/hiro"
 
 type Props struct {
 	Id     string
@@ -8,6 +8,6 @@ type Props struct {
 	Dark   bool
 	DataX  any
 	DataY  any
-	Config mirage.Map
+	Config hiro.Map
 	Height int
 }

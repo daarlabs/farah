@@ -1,6 +1,6 @@
 package dialog_component
 
-import . "github.com/daarlabs/arcanum/gox"
+import . "github.com/daarlabs/hirokit/gox"
 
 type Props struct {
 	Open  bool

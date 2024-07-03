@@ -4,17 +4,17 @@ import (
 	"strconv"
 	"time"
 	
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/ui/menu_ui/menu_item_ui"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 	
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/farah/ui/icon_ui"
 )
 
 type DarkModeSwtitcher struct {
-	mirage.Component
+	hiro.Component
 	Menu bool `json:"-"`
 	dark bool
 }

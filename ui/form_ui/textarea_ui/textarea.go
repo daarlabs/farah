@@ -3,8 +3,8 @@ package textarea_ui
 import (
 	"fmt"
 	
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/tempest"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/tempest"
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/tempest/form_tempest/form_input_tempest"
 	"github.com/daarlabs/farah/tempest/util_tempest"

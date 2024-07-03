@@ -3,15 +3,15 @@ package multiselect_field_component
 import (
 	"slices"
 	
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/ui/form_ui/hidden_field_ui"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 	
-	. "github.com/daarlabs/arcanum/gox"
+	. "github.com/daarlabs/hirokit/gox"
 	
-	"github.com/daarlabs/arcanum/hx"
+	"github.com/daarlabs/hirokit/hx"
 	
 	"github.com/daarlabs/farah/ui/form_ui/field_label_ui"
 	
@@ -24,7 +24,7 @@ import (
 )
 
 type MultiSelectField[T comparable] struct {
-	mirage.Component
+	hiro.Component
 	Props   Props[T]                 `json:"-"`
 	Options []select_model.Option[T] `json:"-"`
 }
@@ -142,7 +142,7 @@ func (c *MultiSelectField[T]) createSelectedTag(title string, value T) Node {
 		A(
 			tempest.Class().Name(c.Request().Action()).InlineFlex().Ml(1),
 			hx.Get(
-				c.Generate().Action("HandleChooseOption", mirage.Map{"value": c.removeValue(value)}),
+				c.Generate().Action("HandleChooseOption", hiro.Map{"value": c.removeValue(value)}),
 			),
 			hx.Target(hx.HashId(c.Props.Id)),
 			hx.Swap(hx.SwapOuterHtml),
@@ -174,11 +174,11 @@ func (c *MultiSelectField[T]) createOptions() Node {
 				tempest.Class().CursorPointer(),
 				If(
 					!exist,
-					hx.Get(c.Generate().Action("HandleChooseOption", mirage.Map{"value": append(c.Props.Value, option.Value)})),
+					hx.Get(c.Generate().Action("HandleChooseOption", hiro.Map{"value": append(c.Props.Value, option.Value)})),
 				),
 				If(
 					exist,
-					hx.Get(c.Generate().Action("HandleChooseOption", mirage.Map{"value": c.removeValue(option.Value)})),
+					hx.Get(c.Generate().Action("HandleChooseOption", hiro.Map{"value": c.removeValue(option.Value)})),
 				),
 				hx.Target(hx.HashId(c.Props.Id)),
 				hx.Swap(hx.SwapOuterHtml),

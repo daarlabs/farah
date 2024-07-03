@@ -1,7 +1,7 @@
 package text_field_ui
 
 import (
-	"github.com/daarlabs/arcanum/form"
+	"github.com/daarlabs/hirokit/form"
 )
 
 type Props struct {

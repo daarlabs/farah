@@ -3,7 +3,7 @@ package datepicker_component
 import (
 	"time"
 	
-	"github.com/daarlabs/arcanum/form"
+	"github.com/daarlabs/hirokit/form"
 )
 
 type Props struct {

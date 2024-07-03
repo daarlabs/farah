@@ -1,6 +1,6 @@
 package hidden_field_ui
 
-import . "github.com/daarlabs/arcanum/gox"
+import . "github.com/daarlabs/hirokit/gox"
 
 func HiddenField(name string, value any) Node {
 	var v any

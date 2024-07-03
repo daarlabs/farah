@@ -1,14 +1,14 @@
 package chart_ui
 
 import (
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/mirage"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/hiro"
 )
 
 func LineChart(props Props) Node {
 	props.Config = mergeConfig(
-		mirage.Map{
-			"chart": mirage.Map{
+		hiro.Map{
+			"chart": hiro.Map{
 				"type":   "line",
 				"height": props.Height,
 			},

@@ -1,6 +1,6 @@
 package palette
 
-import "github.com/daarlabs/arcanum/tempest"
+import "github.com/daarlabs/hirokit/tempest"
 
 const (
 	Primary = "primary"

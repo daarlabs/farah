@@ -1,8 +1,8 @@
 package select_field_component
 
 import (
-	"github.com/daarlabs/arcanum/form"
 	"github.com/daarlabs/farah/model/select_model"
+	"github.com/daarlabs/hirokit/form"
 )
 
 type Props[T comparable] struct {

@@ -1,14 +1,14 @@
 package tab_component
 
 import (
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/tempest"
 	"github.com/daarlabs/farah/palette"
+	"github.com/daarlabs/hirokit/hiro"
 )
 
 type TabFeature struct {
-	mirage.Component
+	hiro.Component
 	Props Props `json:"-"`
 }
 
@@ -38,7 +38,7 @@ func (c *TabFeature) Node() Node {
 									c.Props.Active != "" && tab.Name == c.Props.Active,
 									tempest.Class().Bg(palette.Primary, 400).Bg(palette.Primary, 200, tempest.Dark()),
 								),
-							Href(c.Request().Path()+c.Generate().Query(mirage.Map{"tab": tab.Name})),
+							Href(c.Request().Path()+c.Generate().Query(hiro.Map{"tab": tab.Name})),
 							Text(tab.Title),
 						),
 					)

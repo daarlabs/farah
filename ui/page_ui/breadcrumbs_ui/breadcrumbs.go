@@ -1,8 +1,8 @@
 package breadcrumbs_ui
 
 import (
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/tempest"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/tempest"
 	"github.com/daarlabs/farah/palette"
 	
 	"github.com/daarlabs/farah/ui"

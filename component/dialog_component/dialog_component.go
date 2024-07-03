@@ -1,16 +1,16 @@
 package dialog_component
 
 import (
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 	
-	"github.com/daarlabs/arcanum/hx"
 	"github.com/daarlabs/farah/ui/button_ui"
+	"github.com/daarlabs/hirokit/hx"
 )
 
 type DialogComponent struct {
-	mirage.Component
+	hiro.Component
 	Props       Props                  `json:"-"`
 	Cancel      Config                 `json:"-"`
 	Submit      Config                 `json:"-"`

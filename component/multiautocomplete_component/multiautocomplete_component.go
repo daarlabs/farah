@@ -3,18 +3,18 @@ package multiautocomplete_component
 import (
 	"slices"
 	
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/mystiq"
-	"github.com/daarlabs/arcanum/quirk"
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/ui/form_ui"
+	"github.com/daarlabs/hirokit/dyna"
+	"github.com/daarlabs/hirokit/esquel"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 	
-	. "github.com/daarlabs/arcanum/gox"
+	. "github.com/daarlabs/hirokit/gox"
 	
-	"github.com/daarlabs/arcanum/hx"
 	"github.com/daarlabs/farah/ui/form_ui/field_label_ui"
+	"github.com/daarlabs/hirokit/hx"
 	
 	"github.com/daarlabs/farah/model/select_model"
 	"github.com/daarlabs/farah/ui"
@@ -26,9 +26,9 @@ import (
 )
 
 type MultiAutocomplete[T comparable] struct {
-	mirage.Component
+	hiro.Component
 	Props    Props[T]                 `json:"-"`
-	Query    mystiq.Query             `json:"-"`
+	Query    dyna.Query               `json:"-"`
 	Options  []select_model.Option[T] `json:"-"`
 	Selected []select_model.Option[T] `json:"-"`
 	Offset   int                      `json:"-"`
@@ -40,7 +40,7 @@ func (c *MultiAutocomplete[T]) Name() string {
 
 func (c *MultiAutocomplete[T]) Mount() {
 	if !c.Request().Is().Action() {
-		c.Options = c.getAll(mystiq.Param{}.Parse(c))
+		c.Options = c.getAll(dyna.Param{}.Parse(c))
 		c.Selected = c.getSelected()
 	}
 }
@@ -50,18 +50,18 @@ func (c *MultiAutocomplete[T]) Node() Node {
 }
 
 func (c *MultiAutocomplete[T]) HandleChooseOption() error {
-	c.Parse().MustQuery(mystiq.Fulltext, &c.Props.Text)
+	c.Parse().MustQuery(dyna.Fulltext, &c.Props.Text)
 	c.Parse().Multiple().MustQuery("value", &c.Props.Value)
 	c.Selected = c.getSelected()
-	c.Options = c.getAll(mystiq.Param{}.Parse(c))
+	c.Options = c.getAll(dyna.Param{}.Parse(c))
 	return c.Response().Render(c.createMultiAutocomplete(true))
 }
 
 func (c *MultiAutocomplete[T]) HandleSearch() error {
-	c.Parse().MustQuery(mystiq.Fulltext, &c.Props.Text)
+	c.Parse().MustQuery(dyna.Fulltext, &c.Props.Text)
 	c.Parse().Multiple().MustQuery("value", &c.Props.Value)
 	c.Selected = c.getSelected()
-	c.Options = c.getAll(mystiq.Param{Fulltext: c.Props.Text})
+	c.Options = c.getAll(dyna.Param{Fulltext: c.Props.Text})
 	c.Offset = 0
 	return c.Response().Render(
 		c.createMultiAutocomplete(true),
@@ -69,18 +69,18 @@ func (c *MultiAutocomplete[T]) HandleSearch() error {
 }
 
 func (c *MultiAutocomplete[T]) HandleLoadMore() error {
-	c.Parse().MustQuery(mystiq.Offset, &c.Offset)
-	c.Options = c.getAll(mystiq.Param{}.Parse(c))
+	c.Parse().MustQuery(dyna.Offset, &c.Offset)
+	c.Options = c.getAll(dyna.Param{}.Parse(c))
 	c.Parse().MustQuery("value", &c.Props.Value)
 	c.Selected = c.getSelected()
 	return c.Response().Render(c.createOptions())
 }
 
-func (c *MultiAutocomplete[T]) getAll(param mystiq.Param) []select_model.Option[T] {
+func (c *MultiAutocomplete[T]) getAll(param dyna.Param) []select_model.Option[T] {
 	result := make([]select_model.Option[T], 0)
-	param.Fields.Fulltext = []string{quirk.Vectors}
+	param.Fields.Fulltext = []string{esquel.Vectors}
 	param.Fields.Order = map[string]string{c.Query.Alias: c.Query.Value}
-	q := mystiq.New()
+	q := dyna.New()
 	if c.Query.CanUse() {
 		q = q.DB(c.DB(), c.Query)
 	}
@@ -96,7 +96,7 @@ func (c *MultiAutocomplete[T]) getSelected() []select_model.Option[T] {
 	if len(c.Props.Value) == 0 {
 		return result
 	}
-	q := mystiq.New()
+	q := dyna.New()
 	if c.Query.CanUse() {
 		q = q.DB(c.DB(), c.Query)
 	}
@@ -126,11 +126,11 @@ func (c *MultiAutocomplete[T]) createMultiAutocomplete(open bool) Node {
 						BorderColor(palette.Primary, 400, tempest.Focus()).
 						Extend(form_tempest.FocusShadow()),
 					Type("text"),
-					Name(mystiq.Fulltext),
+					Name(dyna.Fulltext),
 					Value(c.Props.Text),
 					If(c.Props.Text != "", CustomData("autofocus")),
 					form_ui.Autofocus(),
-					hx.Get(c.Generate().Action("HandleSearch", mirage.Map{"value": c.Props.Value})),
+					hx.Get(c.Generate().Action("HandleSearch", hiro.Map{"value": c.Props.Value})),
 					hx.Trigger("input delay:500ms"),
 					hx.Swap(hx.SwapOuterHtml),
 					hx.Target(hx.HashId(c.Props.Name)),
@@ -208,7 +208,7 @@ func (c *MultiAutocomplete[T]) createSelectedTag(title string, value T) Node {
 			tempest.Class().InlineFlex().Ml(1).CursorPointer(),
 			hx.Get(
 				c.Generate().Action(
-					"HandleChooseOption", mirage.Map{"value": c.removeValue(value), "fulltext": c.Props.Text},
+					"HandleChooseOption", hiro.Map{"value": c.removeValue(value), "fulltext": c.Props.Text},
 				),
 			),
 			hx.Target(hx.HashId(c.Props.Id)),
@@ -247,7 +247,7 @@ func (c *MultiAutocomplete[T]) createLoadMore(offset int) Node {
 	return Fragment(
 		hx.Get(
 			c.Generate().Action(
-				"HandleLoadMore", mirage.Map{"offset": offset + mystiq.DefaultLimit, "value": c.Props.Value},
+				"HandleLoadMore", hiro.Map{"offset": offset + dyna.DefaultLimit, "value": c.Props.Value},
 			),
 		),
 		hx.Target(hx.HashId(c.Props.Name+"-options")),
@@ -263,13 +263,13 @@ func (c *MultiAutocomplete[T]) createOptions() Node {
 			exist := slices.Contains(c.Props.Value, option.Value)
 			return A(
 				tempest.Class().CursorPointer(),
-				If((i+1)%mystiq.DefaultLimit == 0, c.createLoadMore(c.Offset)),
+				If((i+1)%dyna.DefaultLimit == 0, c.createLoadMore(c.Offset)),
 				If(
 					!exist,
 					hx.Get(
 						c.Generate().Action(
 							"HandleChooseOption",
-							mirage.Map{"value": append(c.Props.Value, option.Value), "fulltext": c.Props.Text},
+							hiro.Map{"value": append(c.Props.Value, option.Value), "fulltext": c.Props.Text},
 						),
 					),
 				),
@@ -278,7 +278,7 @@ func (c *MultiAutocomplete[T]) createOptions() Node {
 					hx.Get(
 						c.Generate().Action(
 							"HandleChooseOption",
-							mirage.Map{"value": c.removeValue(option.Value), "fulltext": c.Props.Text},
+							hiro.Map{"value": c.removeValue(option.Value), "fulltext": c.Props.Text},
 						),
 					),
 				),

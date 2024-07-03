@@ -3,14 +3,14 @@ package select_field_component
 import (
 	"reflect"
 	
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/tempest/form_tempest/form_input_tempest"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 	
-	. "github.com/daarlabs/arcanum/gox"
+	. "github.com/daarlabs/hirokit/gox"
 	
-	"github.com/daarlabs/arcanum/hx"
+	"github.com/daarlabs/hirokit/hx"
 	
 	"github.com/daarlabs/farah/ui/form_ui/field_label_ui"
 	"github.com/daarlabs/farah/ui/form_ui/hidden_field_ui"
@@ -24,7 +24,7 @@ import (
 )
 
 type SelectField[T comparable] struct {
-	mirage.Component
+	hiro.Component
 	Props   Props[T]                 `json:"-"`
 	Options []select_model.Option[T] `json:"-"`
 }
@@ -136,7 +136,7 @@ func (c *SelectField[T]) createOptions() Node {
 	return Range(
 		c.Options,
 		func(option select_model.Option[T], i int) Node {
-			action := c.Generate().Action("HandleChooseOption", mirage.Map{"value": option.Value, "text": option.Text})
+			action := c.Generate().Action("HandleChooseOption", hiro.Map{"value": option.Value, "text": option.Text})
 			return A(
 				tempest.Class().CursorPointer(),
 				menu_ui.Close(),

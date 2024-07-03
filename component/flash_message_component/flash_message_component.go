@@ -1,15 +1,15 @@
 package flash_message_component
 
 import (
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/hx"
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/ui/page_ui/flash_message_ui"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/hx"
+	"github.com/daarlabs/hirokit/tempest"
 )
 
 type FlashMessage struct {
-	mirage.Component
+	hiro.Component
 }
 
 const (
@@ -36,7 +36,7 @@ func (c *FlashMessage) createFlashMessages() Node {
 		Id(hx.Id(TargetId)),
 		tempest.Class().Fixed().Grid().Gap(4).Top(8).Right(8).W("200px").Z(9999),
 		Range(
-			c.Flash().MustGet(), func(item mirage.Message, _ int) Node {
+			c.Flash().MustGet(), func(item hiro.Message, _ int) Node {
 				return flash_message_ui.Message(item)
 			},
 		),

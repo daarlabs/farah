@@ -1,6 +1,6 @@
 package link_ui
 
-import "github.com/daarlabs/arcanum/tempest"
+import "github.com/daarlabs/hirokit/tempest"
 
 type Props struct {
 	Url   string

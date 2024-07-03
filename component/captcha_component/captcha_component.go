@@ -8,19 +8,19 @@ import (
 	
 	"github.com/dchest/uniuri"
 	
-	"github.com/daarlabs/arcanum/alpine"
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/hx"
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
+	"github.com/daarlabs/hirokit/hx"
+	"github.com/daarlabs/hirokit/tempest"
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/ui/form_ui/checkbox_ui"
 	"github.com/daarlabs/farah/ui/form_ui/error_message_ui"
 	"github.com/daarlabs/farah/ui/form_ui/hidden_field_ui"
+	"github.com/daarlabs/hirokit/alpine"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/hiro"
 )
 
 type Captcha struct {
-	mirage.Component
+	hiro.Component
 	Answer         int       `json:"answer"`
 	Attempt        int       `json:"attempt"`
 	LastAttempt    time.Time `json:"lastAttempt"`
@@ -147,7 +147,7 @@ func (c *Captcha) createCaptcha(state int, randomRange []int) Node {
 					state == stateUnchecked,
 					checkbox_ui.Checkbox(
 						checkbox_ui.Props{Id: "captcha", Label: c.getCheckboxLabel()},
-						hx.Get(c.Generate().Action("HandleCheck", mirage.Map{captchaChallenge: c.ChallengeToken})),
+						hx.Get(c.Generate().Action("HandleCheck", hiro.Map{captchaChallenge: c.ChallengeToken})),
 						hx.Target(hx.HashId("captcha")),
 						hx.Trigger("change delay:400ms"),
 						hx.Swap(hx.SwapOuterHtml),
@@ -170,7 +170,7 @@ func (c *Captcha) createCaptcha(state int, randomRange []int) Node {
 						),
 					),
 					Div(
-						alpine.Data(mirage.Map{"active": 0}),
+						alpine.Data(hiro.Map{"active": 0}),
 						tempest.Class().Grid().GridCols(4).Gap(2).PlaceItemsCenter(),
 						Range(
 							randomRange, func(number int, i int) Node {
@@ -191,7 +191,7 @@ func (c *Captcha) createCaptcha(state int, randomRange []int) Node {
 									),
 									hx.Get(
 										c.Generate().Action(
-											"HandleChoose", mirage.Map{"answer": i + 1, captchaChallenge: c.ChallengeToken},
+											"HandleChoose", hiro.Map{"answer": i + 1, captchaChallenge: c.ChallengeToken},
 										),
 									),
 									hx.Target(hx.HashId("captcha")),
@@ -200,7 +200,7 @@ func (c *Captcha) createCaptcha(state int, randomRange []int) Node {
 									Img(
 										tempest.Class().Name(c.Request().Name()).Size(12).BgSlate(300).BgSlate(600, tempest.Dark()),
 										Loading("lazy"),
-										Src(c.Generate().Action("GetImg", mirage.Map{"img": name})),
+										Src(c.Generate().Action("GetImg", hiro.Map{"img": name})),
 										Alt(name),
 									),
 								)

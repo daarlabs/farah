@@ -4,10 +4,10 @@ import (
 	"encoding/json"
 	"strings"
 	
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/palette"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 )
 
 func Chart(props Props) Node {
@@ -36,11 +36,11 @@ func Chart(props Props) Node {
 	)
 }
 
-func mergeConfig(c1, c2 mirage.Map) mirage.Map {
+func mergeConfig(c1, c2 hiro.Map) hiro.Map {
 	for k1, v1 := range c1 {
-		if v1, ok := v1.(mirage.Map); ok {
+		if v1, ok := v1.(hiro.Map); ok {
 			if v2, ok := c2[k1]; ok {
-				if v2, ok := v2.(mirage.Map); ok {
+				if v2, ok := v2.(hiro.Map); ok {
 					c2[k1] = mergeConfig(v1, v2)
 					continue
 				}
@@ -51,7 +51,7 @@ func mergeConfig(c1, c2 mirage.Map) mirage.Map {
 	return c2
 }
 
-func createConfig(props Props) mirage.Map {
+func createConfig(props Props) hiro.Map {
 	gridColor := tempest.Pallete[tempest.Slate][200]
 	legendColor := tempest.Pallete[tempest.Slate][900]
 	primaryColor := palette.PrimaryPallete[400]
@@ -60,39 +60,39 @@ func createConfig(props Props) mirage.Map {
 		legendColor = "#FFFFFF"
 		primaryColor = palette.PrimaryPallete[200]
 	}
-	return mirage.Map{
-		"chart": mirage.Map{
-			"toolbar": mirage.Map{
+	return hiro.Map{
+		"chart": hiro.Map{
+			"toolbar": hiro.Map{
 				"show": false,
 			},
 		},
-		"grid": mirage.Map{
+		"grid": hiro.Map{
 			"borderColor": gridColor,
 		},
-		"series": mirage.Slice{
+		"series": hiro.Slice{
 			{
 				"name":  props.Id,
 				"color": primaryColor,
 				"data":  props.DataY,
 			},
 		},
-		"stroke": mirage.Map{
+		"stroke": hiro.Map{
 			"colors": []string{primaryColor},
 		},
-		"markers": mirage.Map{
+		"markers": hiro.Map{
 			"colors": []string{primaryColor},
 		},
-		"xaxis": mirage.Map{
+		"xaxis": hiro.Map{
 			"categories": props.DataX,
-			"labels": mirage.Map{
-				"style": mirage.Map{
+			"labels": hiro.Map{
+				"style": hiro.Map{
 					"colors": legendColor,
 				},
 			},
 		},
-		"yaxis": mirage.Map{
-			"labels": mirage.Map{
-				"style": mirage.Map{
+		"yaxis": hiro.Map{
+			"labels": hiro.Map{
+				"style": hiro.Map{
 					"colors": legendColor,
 				},
 			},

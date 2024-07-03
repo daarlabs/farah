@@ -1,12 +1,12 @@
 package menu_ui
 
 import (
-	"github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/farah/ui/icon_ui"
+	"github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/tempest"
 )
 
 func DefaultHandler(props Props) gox.Node {

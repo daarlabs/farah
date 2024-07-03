@@ -1,6 +1,6 @@
 package multiautocomplete_component
 
-import "github.com/daarlabs/arcanum/form"
+import "github.com/daarlabs/hirokit/form"
 
 type Props[T comparable] struct {
 	Id       string

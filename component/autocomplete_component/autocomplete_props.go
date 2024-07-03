@@ -1,7 +1,7 @@
 package autocomplete_component
 
 import (
-	"github.com/daarlabs/arcanum/form"
+	"github.com/daarlabs/hirokit/form"
 )
 
 type Props[T comparable] struct {

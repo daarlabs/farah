@@ -4,16 +4,17 @@ import (
 	"fmt"
 	"reflect"
 	
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/mystiq"
-	"github.com/daarlabs/arcanum/quirk"
-	"github.com/daarlabs/arcanum/tempest"
+	"github.com/daarlabs/hirokit/dyna"
+	
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/tempest/form_tempest/form_input_tempest"
+	"github.com/daarlabs/hirokit/esquel"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 	
-	. "github.com/daarlabs/arcanum/gox"
+	. "github.com/daarlabs/hirokit/gox"
 	
-	"github.com/daarlabs/arcanum/hx"
+	"github.com/daarlabs/hirokit/hx"
 	
 	"github.com/daarlabs/farah/ui/form_ui/field_label_ui"
 	"github.com/daarlabs/farah/ui/form_ui/hidden_field_ui"
@@ -27,10 +28,10 @@ import (
 )
 
 type Autocomplete[T comparable] struct {
-	mirage.Component
+	hiro.Component
 	Props   Props[T]                 `json:"-"`
-	Param   mirage.Map               `json:"-"`
-	Query   mystiq.Query             `json:"-"`
+	Param   hiro.Map                 `json:"-"`
+	Query   dyna.Query               `json:"-"`
 	Options []select_model.Option[T] `json:"-"`
 	Offset  int                      `json:"-"`
 }
@@ -42,7 +43,7 @@ func (c *Autocomplete[T]) Name() string {
 func (c *Autocomplete[T]) Mount() {
 	if !c.Request().Is().Action() {
 		c.Options = c.getAll(
-			mystiq.Param{}.Parse(c),
+			dyna.Param{}.Parse(c),
 		)
 	}
 	if !reflect.ValueOf(c.Props.Value).IsZero() && c.Props.Text == "" {
@@ -57,7 +58,7 @@ func (c *Autocomplete[T]) Node() Node {
 func (c *Autocomplete[T]) HandleSearch() error {
 	c.Parse().MustQuery("value", &c.Props.Value)
 	c.Parse().MustQuery("fulltext", &c.Props.Text)
-	c.Options = c.getAll(mystiq.Param{Fulltext: c.Props.Text})
+	c.Options = c.getAll(dyna.Param{Fulltext: c.Props.Text})
 	c.Offset = 0
 	return c.Response().Render(
 		c.createAutocomplete(true),
@@ -65,7 +66,7 @@ func (c *Autocomplete[T]) HandleSearch() error {
 }
 
 func (c *Autocomplete[T]) HandleLoadMore() error {
-	param := mystiq.Param{}.Parse(c)
+	param := dyna.Param{}.Parse(c)
 	c.Offset = param.Offset
 	c.Options = c.getAll(param)
 	c.Parse().MustQuery("value", &c.Props.Value)
@@ -73,7 +74,7 @@ func (c *Autocomplete[T]) HandleLoadMore() error {
 }
 
 func (c *Autocomplete[T]) HandleChooseOption() error {
-	c.Options = c.getAll(mystiq.Param{}.Parse(c))
+	c.Options = c.getAll(dyna.Param{}.Parse(c))
 	c.Parse().MustQuery("text", &c.Props.Text)
 	c.Parse().MustQuery("value", &c.Props.Value)
 	return c.Response().Render(c.createAutocomplete(false))
@@ -153,7 +154,7 @@ func (c *Autocomplete[T]) createMenuProps(open bool) menu_ui.Props {
 
 func (c *Autocomplete[T]) createLoadMore(offset int) Node {
 	return Fragment(
-		hx.Get(c.Generate().Action("HandleLoadMore", mirage.Map{"offset": offset + mystiq.DefaultLimit}.Merge(c.Param))),
+		hx.Get(c.Generate().Action("HandleLoadMore", hiro.Map{"offset": offset + dyna.DefaultLimit}.Merge(c.Param))),
 		hx.Target("#hx-"+c.Props.Name+"-options"),
 		hx.Swap(hx.SwapBeforeEnd),
 		hx.Trigger("intersect once"),
@@ -167,11 +168,11 @@ func (c *Autocomplete[T]) createOptions() Node {
 		func(option select_model.Option[T], i int) Node {
 			return A(
 				tempest.Class().Cursor("pointer"),
-				If((i+1)%mystiq.DefaultLimit == 0, c.createLoadMore(c.Offset)),
+				If((i+1)%dyna.DefaultLimit == 0, c.createLoadMore(c.Offset)),
 				menu_ui.Close(),
 				hx.Get(
 					c.Generate().Action(
-						"HandleChooseOption", mirage.Map{"value": option.Value, "text": option.Text}.Merge(c.Param),
+						"HandleChooseOption", hiro.Map{"value": option.Value, "text": option.Text}.Merge(c.Param),
 					),
 				),
 				hx.Target(hx.HashId(c.Props.Id)),
@@ -185,15 +186,15 @@ func (c *Autocomplete[T]) createOptions() Node {
 	)
 }
 
-func (c *Autocomplete[T]) getAll(param mystiq.Param) []select_model.Option[T] {
+func (c *Autocomplete[T]) getAll(param dyna.Param) []select_model.Option[T] {
 	result := make([]select_model.Option[T], 0)
-	param.Order = []string{"text:" + mystiq.Asc}
-	param.Fields.Fulltext = []string{quirk.Vectors}
+	param.Order = []string{"text:" + dyna.Asc}
+	param.Fields.Fulltext = []string{esquel.Vectors}
 	textField, ok := c.Query.Fields["text"]
 	if ok {
 		param.Fields.Order = map[string]string{"text": textField}
 	}
-	q := mystiq.New()
+	q := dyna.New()
 	if len(c.Options) == 0 && c.Query.CanUse() {
 		q = q.DB(c.DB(), c.Query)
 	}
@@ -206,7 +207,7 @@ func (c *Autocomplete[T]) getAll(param mystiq.Param) []select_model.Option[T] {
 
 func (c *Autocomplete[T]) getOne() select_model.Option[T] {
 	var result select_model.Option[T]
-	q := mystiq.New()
+	q := dyna.New()
 	q = q.DB(c.DB(), c.Query)
 	q.MustGetOne(c.Query.Value, c.Props.Value, &result)
 	return result

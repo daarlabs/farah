@@ -1,8 +1,8 @@
 package box_ui
 
 import (
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/tempest"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/tempest"
 )
 
 func Box(props Props, nodes ...Node) Node {

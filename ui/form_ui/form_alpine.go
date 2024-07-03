@@ -1,8 +1,8 @@
 package form_ui
 
 import (
-	"github.com/daarlabs/arcanum/alpine"
-	"github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/hirokit/alpine"
+	"github.com/daarlabs/hirokit/gox"
 )
 
 func Autofocus() gox.Node {

@@ -3,19 +3,19 @@ package code_ui
 import (
 	"github.com/dchest/uniuri"
 	
-	"github.com/daarlabs/arcanum/alpine"
-	"github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/farah/ui/icon_ui"
+	"github.com/daarlabs/hirokit/alpine"
+	"github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 )
 
 func Code(props Props) gox.Node {
 	id := "copy-" + uniuri.New()
 	return gox.Div(
-		alpine.Data(mirage.Map{}),
+		alpine.Data(hiro.Map{}),
 		alpine.Init("new Clipboard('#"+id+"');"),
 		tempest.Class().Relative().TextXs().TextSlate(900).TextWhite(tempest.Dark()).
 			Py(4).Pl(4).Pr(8).Rounded().

@@ -3,16 +3,16 @@ package lang_switcher_component
 import (
 	"embed"
 	
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/farah/ui/menu_ui"
 	"github.com/daarlabs/farah/ui/menu_ui/menu_item_ui"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 )
 
 type LangSwitcher struct {
-	mirage.Component
+	hiro.Component
 }
 
 //go:embed flag/*.svg
@@ -31,7 +31,7 @@ func (c *LangSwitcher) Node() Node {
 	langsNodes := make([]Node, len(langs))
 	for i, lang := range langs {
 		langsNodes[i] = A(
-			Href(c.Generate().Current(mirage.Map{"lang": lang.Code})),
+			Href(c.Generate().Current(hiro.Map{"lang": lang.Code})),
 			menu_item_ui.MenuItem(
 				menu_item_ui.Props{
 					Selected: lang.Code == currentLang,

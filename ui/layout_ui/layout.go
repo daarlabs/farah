@@ -1,13 +1,13 @@
 package layout_ui
 
 import (
-	. "github.com/daarlabs/arcanum/gox"
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
 	"github.com/daarlabs/farah/component/flash_message_component"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 )
 
-func Layout(c mirage.Ctx, nodes ...Node) Node {
+func Layout(c hiro.Ctx, nodes ...Node) Node {
 	currentLang := c.Lang().Current()
 	title := c.Page().Get().Title()
 	c.Page().Set().Meta(

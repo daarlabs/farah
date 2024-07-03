@@ -3,7 +3,7 @@ package number_field_ui
 import (
 	"golang.org/x/exp/constraints"
 	
-	"github.com/daarlabs/arcanum/form"
+	"github.com/daarlabs/hirokit/form"
 )
 
 type Props[T constraints.Integer | constraints.Float] struct {

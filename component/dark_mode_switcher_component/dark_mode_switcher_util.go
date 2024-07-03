@@ -1,7 +1,7 @@
 package dark_mode_switcher_component
 
-import "github.com/daarlabs/arcanum/mirage"
+import "github.com/daarlabs/hirokit/hiro"
 
-func Dark(c mirage.Ctx) bool {
+func Dark(c hiro.Ctx) bool {
 	return c.Cookie().Get(DarkModeCookieKey) == "true"
 }

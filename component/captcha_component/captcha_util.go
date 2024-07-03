@@ -3,14 +3,14 @@ package captcha_component
 import (
 	"time"
 	
-	"github.com/daarlabs/arcanum/mirage"
+	"github.com/daarlabs/hirokit/hiro"
 )
 
 const (
 	captchaCacheKey = "captcha"
 )
 
-func Valid(c mirage.Ctx) (bool, error) {
+func Valid(c hiro.Ctx) (bool, error) {
 	if c.Request().Is().Get() {
 		valid := true
 		if err := c.State().Get(captchaCacheKey, &valid); err != nil {
@@ -31,7 +31,7 @@ func Valid(c mirage.Ctx) (bool, error) {
 	return isValid, c.State().Save(captchaCacheKey, isValid)
 }
 
-func MustValid(c mirage.Ctx) bool {
+func MustValid(c hiro.Ctx) bool {
 	valid, err := Valid(c)
 	if err != nil {
 		panic(err)
@@ -39,6 +39,6 @@ func MustValid(c mirage.Ctx) bool {
 	return valid
 }
 
-func save(c mirage.Ctx, challengeToken, successToken string) error {
+func save(c hiro.Ctx, challengeToken, successToken string) error {
 	return c.Cache().Set(captchaCacheKey+":"+challengeToken, captcha{SuccessToken: successToken}, 5*time.Minute)
 }

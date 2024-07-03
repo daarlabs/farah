@@ -1,11 +1,11 @@
 package menu_ui
 
 import (
-	"github.com/daarlabs/arcanum/alpine"
-	"github.com/daarlabs/arcanum/mirage"
-	"github.com/daarlabs/arcanum/tempest"
+	"github.com/daarlabs/hirokit/alpine"
+	"github.com/daarlabs/hirokit/tempest"
+	"github.com/daarlabs/hirokit/hiro"
 	
-	"github.com/daarlabs/arcanum/gox"
+	"github.com/daarlabs/hirokit/gox"
 	
 	"github.com/daarlabs/farah/ui"
 )
@@ -18,7 +18,7 @@ func Menu(props Props, handler gox.Node, nodes ...gox.Node) gox.Node {
 		props.PositionY = ui.Bottom
 	}
 	return gox.Div(
-		alpine.Data(mirage.Map{"open": props.Open}),
+		alpine.Data(hiro.Map{"open": props.Open}),
 		alpine.Click("open = false", alpine.Outside),
 		gox.If(
 			props.Id != "",

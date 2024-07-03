@@ -1,6 +1,6 @@
 package textarea_ui
 
-import "github.com/daarlabs/arcanum/form"
+import "github.com/daarlabs/hirokit/form"
 
 type Props struct {
 	Id       string

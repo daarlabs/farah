@@ -1,9 +1,9 @@
 package farah
 
-import "github.com/daarlabs/arcanum/mirage"
+import "github.com/daarlabs/hirokit/hiro"
 
-func Plugin() mirage.Plugin {
-	return mirage.Plugin{
+func Plugin() hiro.Plugin {
+	return hiro.Plugin{
 		Name:    "Farah",
 		Locales: locales,
 	}
