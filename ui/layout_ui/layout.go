@@ -8,7 +8,10 @@ import (
 )
 
 func Layout(c hiro.Ctx, nodes ...Node) Node {
-	currentLang := c.Lang().Current()
+	var currentLang string
+	if c.Config().Localization.Enabled {
+		currentLang = c.Lang().Current()
+	}
 	title := c.Page().Get().Title()
 	c.Page().Set().Meta(
 		"viewport", "width=device-width, initial-scale=1",
