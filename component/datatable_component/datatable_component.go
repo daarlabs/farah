@@ -5,12 +5,12 @@ import (
 	"strings"
 	
 	"github.com/daarlabs/hirokit/dyna"
+	"github.com/daarlabs/hirokit/esquel"
 	
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/ui/box_ui"
 	"github.com/daarlabs/farah/ui/form_ui"
 	"github.com/daarlabs/farah/ui/spinner_ui"
-	"github.com/daarlabs/hirokit/esquel"
 	"github.com/daarlabs/hirokit/hiro"
 	"github.com/daarlabs/hirokit/tempest"
 	
@@ -74,8 +74,12 @@ func (c *Datatable[T]) HandleLoadMore() error {
 func (c *Datatable[T]) getData() []T {
 	param := c.Param
 	result := make([]T, 0)
-	param.Fields.Fulltext = []string{esquel.Vectors}
-	param.Fields.Order = c.Query.Fields
+	if len(param.Fields.Fulltext) == 0 {
+		param.Fields.Fulltext = []string{c.Query.Alias + "." + esquel.Vectors}
+	}
+	if len(param.Fields.Order) == 0 {
+		param.Fields.Order = c.Query.Fields
+	}
 	q := dyna.New()
 	if c.GetDataFunc != nil {
 		q = q.GetAllFunc(c.GetDataFunc)
@@ -120,8 +124,8 @@ func (c *Datatable[T]) createDatatable() Node {
 
 func (c *Datatable[T]) createHead() Node {
 	return Div(
-		tempest.Class().Transition().H(10).W("full").BorderB(1).
-			BorderColor(palette.Primary, 400).BorderColor(palette.Primary, 200, tempest.Dark()),
+		tempest.Class().Transition().Grid().H(10).W("full").BorderB(1).
+			BorderColor(palette.Primary, 400).BorderColor(palette.Primary, 200, tempest.Dark()).Pr(4),
 		c.createSizeStyle(),
 		Range(
 			c.fields, func(field Field, _ int) Node {
@@ -148,7 +152,7 @@ func (c *Datatable[T]) createHead() Node {
 							icon_ui.Icon(
 								icon_ui.Props{
 									Icon:  icon_ui.ChevronUp,
-									Class: tempest.Class().TextSlate(900).TextWhite(tempest.Dark()),
+									Class: tempest.Class().FlexNone().TextSlate(900).TextWhite(tempest.Dark()),
 									Size:  ui.Sm,
 								},
 							),
@@ -158,7 +162,7 @@ func (c *Datatable[T]) createHead() Node {
 							icon_ui.Icon(
 								icon_ui.Props{
 									Icon:  icon_ui.ChevronDown,
-									Class: tempest.Class().TextSlate(900).TextWhite(tempest.Dark()),
+									Class: tempest.Class().FlexNone().TextSlate(900).TextWhite(tempest.Dark()),
 									Size:  ui.Sm,
 								},
 							),
@@ -211,20 +215,16 @@ func (c *Datatable[T]) createNextOrder(name string) []string {
 	if !exist {
 		return append(c.Param.Order, name+":"+dyna.Asc)
 	}
-	if exist {
-		for _, o := range c.Param.Order {
-			isName := strings.HasPrefix(o, name+":")
-			if !isName {
-				result = append(result, o)
-				continue
-			}
-			if isName {
-				if strings.HasSuffix(o, dyna.Asc) {
-					result = append(result, strings.Replace(o, dyna.Asc, dyna.Desc, 1))
-				}
-				continue
-			}
+	for _, o := range c.Param.Order {
+		isName := strings.HasPrefix(o, name+":")
+		if !isName {
+			result = append(result, o)
+			continue
 		}
+		if strings.HasSuffix(o, dyna.Asc) {
+			result = append(result, strings.Replace(o, dyna.Asc, dyna.Desc, 1))
+		}
+		continue
 	}
 	return result
 }

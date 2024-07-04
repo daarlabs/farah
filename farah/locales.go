@@ -24,6 +24,9 @@ var (
 			// Dark mode switcher
 			"component.dark-mode-switcher.light": "Světlý režim",
 			"component.dark-mode-switcher.dark":  "Temný režim",
+			
+			// Filepicker
+			"component.filepicker.choose.file": "Vyberte soubor(y)",
 		},
 		"en": {
 			// Datepicker
@@ -47,6 +50,9 @@ var (
 			// Dark mode switcher
 			"component.dark-mode-switcher.light": "Light mode",
 			"component.dark-mode-switcher.dark":  "Dark mode",
+			
+			// Filepicker
+			"component.filepicker.choose.file": "Choose file(s)",
 		},
 	}
 )

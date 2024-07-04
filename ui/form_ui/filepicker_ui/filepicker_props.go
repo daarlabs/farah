@@ -6,13 +6,26 @@ type Props struct {
 	Id       string
 	Name     string
 	Label    string
-	Value    form.Multipart
+	Value    []form.Multipart
 	Messages []string
 	Disabled bool
 	Required bool
+	Multiple bool
 }
 
 func CreateProps(field form.Field[form.Multipart]) Props {
+	return Props{
+		Id:       field.Id,
+		Name:     field.Name,
+		Label:    field.Label,
+		Value:    []form.Multipart{field.Value},
+		Messages: field.Messages,
+		Disabled: field.Disabled,
+		Required: field.Required,
+	}
+}
+
+func CreateMultipleProps(field form.Field[[]form.Multipart]) Props {
 	return Props{
 		Id:       field.Id,
 		Name:     field.Name,
@@ -21,5 +34,6 @@ func CreateProps(field form.Field[form.Multipart]) Props {
 		Messages: field.Messages,
 		Disabled: field.Disabled,
 		Required: field.Required,
+		Multiple: true,
 	}
 }

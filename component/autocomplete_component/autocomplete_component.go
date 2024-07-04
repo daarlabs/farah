@@ -29,11 +29,12 @@ import (
 
 type Autocomplete[T comparable] struct {
 	hiro.Component
-	Props   Props[T]                 `json:"-"`
-	Param   hiro.Map                 `json:"-"`
-	Query   dyna.Query               `json:"-"`
-	Options []select_model.Option[T] `json:"-"`
-	Offset  int                      `json:"-"`
+	Props       Props[T]                            `json:"-"`
+	Param       hiro.Map                            `json:"-"`
+	Query       dyna.Query                          `json:"-"`
+	Options     []select_model.Option[T]            `json:"-"`
+	Offset      int                                 `json:"-"`
+	GetDataFunc func(param dyna.Param, t any) error `json:"-"`
 }
 
 func (c *Autocomplete[T]) Name() string {
@@ -195,6 +196,9 @@ func (c *Autocomplete[T]) getAll(param dyna.Param) []select_model.Option[T] {
 		param.Fields.Order = map[string]string{"text": textField}
 	}
 	q := dyna.New()
+	if c.GetDataFunc != nil {
+		q = q.GetAllFunc(c.GetDataFunc)
+	}
 	if len(c.Options) == 0 && c.Query.CanUse() {
 		q = q.DB(c.DB(), c.Query)
 	}
