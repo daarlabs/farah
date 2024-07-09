@@ -10,8 +10,12 @@ import (
 type RowBuilder[T any] interface {
 	Data() T
 	Row(nodes ...Node) Node
-	Field(node Node, truncate ...bool) Node
+	Field(node Node, config ...FieldConfig) Node
 	Link(link string, nodes ...Node) Node
+}
+
+type FieldConfig struct {
+	Truncate bool
 }
 
 type rowBuilder[T any] struct {
@@ -48,25 +52,35 @@ func (b *rowBuilder[T]) Row(nodes ...Node) Node {
 	)
 }
 
-func (b *rowBuilder[T]) Field(node Node, truncate ...bool) Node {
+func (b *rowBuilder[T]) Field(node Node, config ...FieldConfig) Node {
+	var cfg FieldConfig
+	if len(config) == 0 {
+		cfg.Truncate = true
+	}
 	field := b.findField()
 	if len(field.Name) == 0 {
 		return Fragment()
 	}
-	shouldTruncate := true
-	if len(truncate) > 0 {
-		shouldTruncate = truncate[0]
+	if len(config) > 0 {
+		cfg = config[0]
 	}
 	return Div(
 		tempest.Class().Transition().Px(4).H(10).TextSize("10px").
 			Flex().ItemsCenter().
 			TextSlate(900).TextWhite(tempest.Dark()).
 			BorderB(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
-			If(shouldTruncate, tempest.Class().Truncate()).
+			Overflow("hidden").
 			If(field.AlignX == ui.Left, tempest.Class().JustifyStart()).
 			If(field.AlignX == ui.Center, tempest.Class().JustifyCenter()).
 			If(field.AlignX == ui.Right, tempest.Class().JustifyEnd()),
-		node,
+		If(
+			cfg.Truncate,
+			Span(tempest.Class().Truncate(), node),
+		),
+		If(
+			!cfg.Truncate,
+			node,
+		),
 	)
 }
 
