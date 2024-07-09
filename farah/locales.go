@@ -25,6 +25,9 @@ var (
 			"component.dark-mode-switcher.light": "Světlý režim",
 			"component.dark-mode-switcher.dark":  "Temný režim",
 			
+			// Datatable
+			"component.datatable.search": "Vyhledat",
+			
 			// Filepicker
 			"component.filepicker.choose.file": "Vyberte soubor(y)",
 		},
@@ -50,6 +53,9 @@ var (
 			// Dark mode switcher
 			"component.dark-mode-switcher.light": "Light mode",
 			"component.dark-mode-switcher.dark":  "Dark mode",
+			
+			// Datatable
+			"component.datatable.search": "Search",
 			
 			// Filepicker
 			"component.filepicker.choose.file": "Choose file(s)",

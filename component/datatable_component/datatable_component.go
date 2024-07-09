@@ -102,7 +102,7 @@ func (c *Datatable[T]) createDatatable() Node {
 			tempest.Class().MaxW("300px"),
 			search_ui.Search(
 				search_ui.Props{
-					Placeholder: "Search", Value: c.Param.Fulltext, Name: dyna.Fulltext,
+					Placeholder: c.createSearchLabel(), Value: c.Param.Fulltext, Name: dyna.Fulltext,
 					Id: hx.Id(c.Props.Name + "-" + dyna.Fulltext),
 				},
 				c.createFulltext(),
@@ -120,6 +120,13 @@ func (c *Datatable[T]) createDatatable() Node {
 			),
 		),
 	)
+}
+
+func (c *Datatable[T]) createSearchLabel() string {
+	if !c.Config().Localization.Enabled {
+		return "Search"
+	}
+	return c.Translate("component.datatable.search")
 }
 
 func (c *Datatable[T]) createHead() Node {
