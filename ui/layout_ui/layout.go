@@ -2,6 +2,8 @@ package layout_ui
 
 import (
 	"github.com/daarlabs/farah/component/flash_message_component"
+	"github.com/daarlabs/hirokit/devtool"
+	"github.com/daarlabs/hirokit/env"
 	. "github.com/daarlabs/hirokit/gox"
 	"github.com/daarlabs/hirokit/hiro"
 	"github.com/daarlabs/hirokit/tempest"
@@ -51,6 +53,10 @@ func Layout(c hiro.Ctx, nodes ...Node) Node {
 				tempest.Class().Transition().Bg(tempest.Slate, 100).Bg(tempest.Slate, 900, tempest.Dark()).
 					Overflow("hidden").W("screen").H("screen"),
 				Fragment(nodes...),
+			),
+			If(
+				env.Development() && c.Config().Dev.Tool,
+				devtool.CreateNode(),
 			),
 		),
 	)

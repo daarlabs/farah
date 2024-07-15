@@ -59,7 +59,7 @@ func (c *Datatable[T]) HandleOrder() error {
 }
 
 func (c *Datatable[T]) HandleSearch() error {
-	c.Parse().MustQuery("fulltext", &c.Param.Fulltext)
+	c.Param = c.Param.Parse(c)
 	c.Param.Offset = 0
 	c.Data = c.getData()
 	return c.Response().Render(c.createDatatable())
@@ -105,7 +105,7 @@ func (c *Datatable[T]) createDatatable() Node {
 					Placeholder: c.createSearchLabel(), Value: c.Param.Fulltext, Name: dyna.Fulltext,
 					Id: hx.Id(c.Props.Name + "-" + dyna.Fulltext),
 				},
-				c.createFulltext(),
+				c.createFulltext(hiro.Map{dyna.Order: c.Param.Order}),
 			),
 		),
 		box_ui.Box(
@@ -248,10 +248,10 @@ func (c *Datatable[T]) createSizeStyle() Node {
 	return Style(Text("grid-template-columns: " + strings.Join(size, " ") + ";"))
 }
 
-func (c *Datatable[T]) createFulltext() Node {
+func (c *Datatable[T]) createFulltext(param hiro.Map) Node {
 	return Fragment(
 		form_ui.Autofocus(),
-		hx.Get(c.Generate().Action("HandleSearch")),
+		hx.Get(c.Generate().Action("HandleSearch", param)),
 		hx.Trigger("input delay:300ms"),
 		hx.Swap(hx.SwapOuterHtml),
 		hx.Target(hx.HashId(c.Props.Name)),

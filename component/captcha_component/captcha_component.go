@@ -8,8 +8,6 @@ import (
 	
 	"github.com/dchest/uniuri"
 	
-	"github.com/daarlabs/hirokit/hx"
-	"github.com/daarlabs/hirokit/tempest"
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/ui/form_ui/checkbox_ui"
 	"github.com/daarlabs/farah/ui/form_ui/error_message_ui"
@@ -17,6 +15,8 @@ import (
 	"github.com/daarlabs/hirokit/alpine"
 	. "github.com/daarlabs/hirokit/gox"
 	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/hx"
+	"github.com/daarlabs/hirokit/tempest"
 )
 
 type Captcha struct {
@@ -164,9 +164,15 @@ func (c *Captcha) createCaptcha(state int, randomRange []int) Node {
 					),
 					If(
 						state == stateFail, Div(
-							tempest.Class().FontSemibold().TextRed(600).TextRed(500, tempest.Dark()).
-								Pb(4).TextCenter().TextXs().LhRelax(),
-							Text(c.Translate("component.captcha.fail")),
+							Div(
+								tempest.Class().FontSemibold().TextSlate(900).TextWhite(tempest.Dark()).Pb(4).TextCenter().TextXs(),
+								Text(c.Translate("component.captcha.images.title")),
+							),
+							Div(
+								tempest.Class().FontSemibold().TextRed(600).TextRed(500, tempest.Dark()).
+									Pb(4).TextCenter().TextXs().LhRelax(),
+								Text(c.Translate("component.captcha.fail")),
+							),
 						),
 					),
 					Div(
@@ -232,7 +238,7 @@ func (c *Captcha) createCaptcha(state int, randomRange []int) Node {
 }
 
 func (c *Captcha) getCheckboxLabel() string {
-	if c.Lang().Current() != "" {
+	if c.Config().Localization.Enabled {
 		return c.Translate("component.captcha.checkbox.label")
 	}
 	return "Confirm, you are a human being"
