@@ -5,6 +5,7 @@ import (
 	"reflect"
 	
 	"github.com/daarlabs/hirokit/dyna"
+	"github.com/daarlabs/hirokit/util/escapex"
 	
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/tempest/form_tempest/form_input_tempest"
@@ -29,12 +30,12 @@ import (
 
 type Autocomplete[T comparable] struct {
 	hiro.Component
-	Props       Props[T]                            `json:"-"`
-	Param       hiro.Map                            `json:"-"`
-	Query       dyna.Query                          `json:"-"`
-	Options     []select_model.Option[T]            `json:"-"`
-	Offset      int                                 `json:"-"`
-	GetDataFunc func(param dyna.Param, t any) error `json:"-"`
+	Props        Props[T]                            `json:"-"`
+	Param        hiro.Map                            `json:"-"`
+	Query        dyna.Query                          `json:"-"`
+	Options      []select_model.Option[T]            `json:"-"`
+	Offset       int                                 `json:"-"`
+	FindDataFunc func(param dyna.Param, t any) error `json:"-"`
 }
 
 func (c *Autocomplete[T]) Name() string {
@@ -43,12 +44,12 @@ func (c *Autocomplete[T]) Name() string {
 
 func (c *Autocomplete[T]) Mount() {
 	if !c.Request().Is().Action() {
-		c.Options = c.getAll(
+		c.Options = c.find(
 			dyna.Param{}.Parse(c),
 		)
 	}
 	if !reflect.ValueOf(c.Props.Value).IsZero() && c.Props.Text == "" {
-		c.Props.Text = c.getOne().Text
+		c.Props.Text = c.findOne().Text
 	}
 }
 
@@ -59,7 +60,7 @@ func (c *Autocomplete[T]) Node() Node {
 func (c *Autocomplete[T]) HandleSearch() error {
 	c.Parse().MustQuery("value", &c.Props.Value)
 	c.Parse().MustQuery("fulltext", &c.Props.Text)
-	c.Options = c.getAll(dyna.Param{Fulltext: c.Props.Text})
+	c.Options = c.find(dyna.Param{Fulltext: c.Props.Text})
 	c.Offset = 0
 	return c.Response().Render(
 		c.createAutocomplete(true),
@@ -69,13 +70,13 @@ func (c *Autocomplete[T]) HandleSearch() error {
 func (c *Autocomplete[T]) HandleLoadMore() error {
 	param := dyna.Param{}.Parse(c)
 	c.Offset = param.Offset
-	c.Options = c.getAll(param)
+	c.Options = c.find(param)
 	c.Parse().MustQuery("value", &c.Props.Value)
 	return c.Response().Render(c.createOptions())
 }
 
 func (c *Autocomplete[T]) HandleChooseOption() error {
-	c.Options = c.getAll(dyna.Param{}.Parse(c))
+	c.Options = c.find(dyna.Param{}.Parse(c))
 	c.Parse().MustQuery("text", &c.Props.Text)
 	c.Parse().MustQuery("value", &c.Props.Value)
 	return c.Response().Render(c.createAutocomplete(false))
@@ -117,7 +118,7 @@ func (c *Autocomplete[T]) createHandler() Node {
 				hx.Get(c.Generate().Action("HandleSearch", c.Param)),
 				hx.Trigger("input delay:500ms"),
 				hx.Swap(hx.SwapOuterHtml),
-				hx.Target(hx.HashId(c.Props.Name)),
+				hx.Target(hx.HashId(c.Props.Id)),
 				hx.Vals(fmt.Sprintf(`{"value":"%v"}`, c.Props.Value)),
 			),
 			Label(
@@ -148,8 +149,8 @@ func (c *Autocomplete[T]) createMenuProps(open bool) menu_ui.Props {
 		Clickable:  true,
 		Scrollable: true,
 		Open:       open,
-		PositionX:  ui.Left,
-		PositionY:  ui.Bottom,
+		PositionX:  c.Props.PositionX,
+		PositionY:  c.Props.PositionY,
 	}
 }
 
@@ -173,21 +174,21 @@ func (c *Autocomplete[T]) createOptions() Node {
 				menu_ui.Close(),
 				hx.Get(
 					c.Generate().Action(
-						"HandleChooseOption", hiro.Map{"value": option.Value, "text": option.Text}.Merge(c.Param),
+						"HandleChooseOption", hiro.Map{"value": option.Value, "text": escapex.Url(option.Text)}.Merge(c.Param),
 					),
 				),
 				hx.Target(hx.HashId(c.Props.Id)),
 				hx.Swap(hx.SwapOuterHtml),
 				hx.Trigger("click"),
 				menu_item_ui.MenuItem(
-					menu_item_ui.Props{Selected: c.Props.Value == option.Value}, Text(option.Text),
+					menu_item_ui.Props{Selected: c.Props.Value == option.Value}, Text(escapex.Url(option.Text)),
 				),
 			)
 		},
 	)
 }
 
-func (c *Autocomplete[T]) getAll(param dyna.Param) []select_model.Option[T] {
+func (c *Autocomplete[T]) find(param dyna.Param) []select_model.Option[T] {
 	result := make([]select_model.Option[T], 0)
 	param.Order = []string{"text:" + dyna.Asc}
 	param.Fields.Fulltext = []string{esquel.Vectors}
@@ -196,8 +197,8 @@ func (c *Autocomplete[T]) getAll(param dyna.Param) []select_model.Option[T] {
 		param.Fields.Order = map[string]string{"text": textField}
 	}
 	q := dyna.New()
-	if c.GetDataFunc != nil {
-		q = q.GetAllFunc(c.GetDataFunc)
+	if c.FindDataFunc != nil {
+		q = q.FindFunc(c.FindDataFunc)
 	}
 	if len(c.Options) == 0 && c.Query.CanUse() {
 		q = q.DB(c.DB(), c.Query)
@@ -205,14 +206,14 @@ func (c *Autocomplete[T]) getAll(param dyna.Param) []select_model.Option[T] {
 	if len(c.Options) > 0 {
 		q = q.Data(select_model.ConvertToMapSlice(c.Options))
 	}
-	q.MustGetAll(param, &result)
+	q.MustFind(param, &result)
 	return result
 }
 
-func (c *Autocomplete[T]) getOne() select_model.Option[T] {
+func (c *Autocomplete[T]) findOne() select_model.Option[T] {
 	var result select_model.Option[T]
 	q := dyna.New()
 	q = q.DB(c.DB(), c.Query)
-	q.MustGetOne(c.Query.Value, c.Props.Value, &result)
+	q.MustFindOne(c.Query.Value, c.Props.Value, &result)
 	return result
 }

@@ -24,13 +24,13 @@ import (
 
 type Datatable[T any] struct {
 	hiro.Component
-	Props       Props                               `json:"-"`
-	Param       dyna.Param                          `json:"-"`
-	Query       dyna.Query                          `json:"-"`
-	GetDataFunc func(param dyna.Param, t any) error `json:"-"`
-	FieldsFunc  func() []Field                      `json:"-"`
-	RowFunc     func(builder RowBuilder[T]) Node    `json:"-"`
-	Data        []T                                 `json:"-"`
+	Props        Props                               `json:"-"`
+	Param        dyna.Param                          `json:"-"`
+	Query        dyna.Query                          `json:"-"`
+	FindDataFunc func(param dyna.Param, t any) error `json:"-"`
+	FieldsFunc   func() []Field                      `json:"-"`
+	RowFunc      func(builder RowBuilder[T]) Node    `json:"-"`
+	Data         []T                                 `json:"-"`
 	
 	fields []Field
 }
@@ -81,8 +81,8 @@ func (c *Datatable[T]) getData() []T {
 		param.Fields.Order = c.Query.Fields
 	}
 	q := dyna.New()
-	if c.GetDataFunc != nil {
-		q = q.GetAllFunc(c.GetDataFunc)
+	if c.FindDataFunc != nil {
+		q = q.FindFunc(c.FindDataFunc)
 	}
 	if c.Query.CanUse() {
 		q = q.DB(c.DB(), c.Query)
@@ -90,7 +90,7 @@ func (c *Datatable[T]) getData() []T {
 	if len(c.Data) > 0 {
 		q = q.Data(convertDataToMapSlice(c.Data))
 	}
-	q.MustGetAll(param, &result)
+	q.MustFind(param, &result)
 	return result
 }
 
@@ -151,7 +151,7 @@ func (c *Datatable[T]) createHead() Node {
 					If(
 						field.Sortable,
 						spinner_ui.Spinner(
-							spinner_ui.Props{Overlay: true, Class: tempest.Class(spinner_ui.Indicator)},
+							spinner_ui.Props{Overlay: true, Class: tempest.Class(spinner_ui.HxIndicator)},
 						),
 						c.createOrder(hiro.Map{dyna.Fulltext: c.Param.Fulltext, dyna.Order: c.createNextOrder(field.Name)}),
 						If(

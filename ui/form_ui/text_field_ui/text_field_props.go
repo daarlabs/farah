@@ -1,6 +1,7 @@
 package text_field_ui
 
 import (
+	"github.com/daarlabs/farah/ui/form_ui"
 	"github.com/daarlabs/hirokit/form"
 )
 
@@ -15,6 +16,7 @@ type Props struct {
 	Disabled    bool
 	Required    bool
 	Boxed       bool
+	Status      string
 }
 
 const (
@@ -38,5 +40,19 @@ func CreateProps(field form.Field[string]) Props {
 
 func (p Props) Box() Props {
 	p.Boxed = true
+	return p
+}
+
+func (p Props) Success(use bool) Props {
+	if use {
+		p.Status = form_ui.StatusSuccess
+	}
+	return p
+}
+
+func (p Props) Error(use bool) Props {
+	if use {
+		p.Status = form_ui.StatusError
+	}
 	return p
 }

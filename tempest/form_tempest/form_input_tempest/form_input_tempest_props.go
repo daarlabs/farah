@@ -4,4 +4,5 @@ type Props struct {
 	Boxed       bool
 	Text        string
 	Placeholder string
+	Status      string
 }

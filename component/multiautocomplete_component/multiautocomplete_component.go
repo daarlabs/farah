@@ -40,7 +40,7 @@ func (c *MultiAutocomplete[T]) Name() string {
 
 func (c *MultiAutocomplete[T]) Mount() {
 	if !c.Request().Is().Action() {
-		c.Options = c.getAll(dyna.Param{}.Parse(c))
+		c.Options = c.find(dyna.Param{}.Parse(c))
 		c.Selected = c.getSelected()
 	}
 }
@@ -53,7 +53,7 @@ func (c *MultiAutocomplete[T]) HandleChooseOption() error {
 	c.Parse().MustQuery(dyna.Fulltext, &c.Props.Text)
 	c.Parse().Multiple().MustQuery("value", &c.Props.Value)
 	c.Selected = c.getSelected()
-	c.Options = c.getAll(dyna.Param{}.Parse(c))
+	c.Options = c.find(dyna.Param{}.Parse(c))
 	return c.Response().Render(c.createMultiAutocomplete(true))
 }
 
@@ -61,7 +61,7 @@ func (c *MultiAutocomplete[T]) HandleSearch() error {
 	c.Parse().MustQuery(dyna.Fulltext, &c.Props.Text)
 	c.Parse().Multiple().MustQuery("value", &c.Props.Value)
 	c.Selected = c.getSelected()
-	c.Options = c.getAll(dyna.Param{Fulltext: c.Props.Text})
+	c.Options = c.find(dyna.Param{Fulltext: c.Props.Text})
 	c.Offset = 0
 	return c.Response().Render(
 		c.createMultiAutocomplete(true),
@@ -70,13 +70,13 @@ func (c *MultiAutocomplete[T]) HandleSearch() error {
 
 func (c *MultiAutocomplete[T]) HandleLoadMore() error {
 	c.Parse().MustQuery(dyna.Offset, &c.Offset)
-	c.Options = c.getAll(dyna.Param{}.Parse(c))
+	c.Options = c.find(dyna.Param{}.Parse(c))
 	c.Parse().MustQuery("value", &c.Props.Value)
 	c.Selected = c.getSelected()
 	return c.Response().Render(c.createOptions())
 }
 
-func (c *MultiAutocomplete[T]) getAll(param dyna.Param) []select_model.Option[T] {
+func (c *MultiAutocomplete[T]) find(param dyna.Param) []select_model.Option[T] {
 	result := make([]select_model.Option[T], 0)
 	param.Fields.Fulltext = []string{esquel.Vectors}
 	param.Fields.Order = map[string]string{c.Query.Alias: c.Query.Value}
@@ -87,7 +87,7 @@ func (c *MultiAutocomplete[T]) getAll(param dyna.Param) []select_model.Option[T]
 	if len(c.Options) > 0 {
 		q = q.Data(select_model.ConvertToMapSlice(c.Options))
 	}
-	q.MustGetAll(param, &result)
+	q.MustFind(param, &result)
 	return result
 }
 
@@ -104,7 +104,7 @@ func (c *MultiAutocomplete[T]) getSelected() []select_model.Option[T] {
 		q = q.Data(select_model.ConvertToMapSlice(c.Options))
 	}
 	
-	q.MustGetMany(c.Query.Value, c.Props.Value, &result)
+	q.MustFindMany(c.Query.Value, c.Props.Value, &result)
 	return result
 }
 

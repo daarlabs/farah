@@ -2,6 +2,7 @@ package form_input_tempest
 
 import (
 	"github.com/daarlabs/farah/palette"
+	"github.com/daarlabs/farah/ui/form_ui"
 	"github.com/daarlabs/hirokit/tempest"
 )
 
@@ -19,8 +20,21 @@ func InputField(props Props) tempest.Tempest {
 		).
 		// Border
 		Border(1).
-		BorderColor(tempest.Slate, 300).
-		BorderColor(tempest.Slate, 600, tempest.Dark()).
+		If(
+			len(props.Status) == 0,
+			tempest.Class().BorderColor(tempest.Slate, 300).
+				BorderColor(tempest.Slate, 600, tempest.Dark()),
+		).
+		If(
+			props.Status == form_ui.StatusSuccess,
+			tempest.Class().BorderColor(tempest.Emerald, 400).
+				BorderColor(tempest.Emerald, 500, tempest.Dark()),
+		).
+		If(
+			props.Status == form_ui.StatusError,
+			tempest.Class().BorderColor(tempest.Red, 400).
+				BorderColor(tempest.Red, 500, tempest.Dark()),
+		).
 		BorderColor(palette.Primary, 400, tempest.Focus()).
 		BorderColor(
 			palette.Primary, 200, tempest.Focus(), tempest.Dark(),

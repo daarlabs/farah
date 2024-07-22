@@ -1,8 +1,9 @@
 package button_ui
 
 import (
-	"github.com/daarlabs/hirokit/tempest"
 	"github.com/daarlabs/farah/ui/spinner_ui"
+	"github.com/daarlabs/hirokit/alpine"
+	"github.com/daarlabs/hirokit/tempest"
 	
 	. "github.com/daarlabs/hirokit/gox"
 	
@@ -33,12 +34,25 @@ func CreateButton(props Props, variantClass tempest.Tempest, nodes ...Node) Node
 		If(!isLink, Type(props.Type)),
 		If(
 			props.Type == TypeSubmit,
+			spinner_ui.Spinner(
+				spinner_ui.Props{
+					Overlay: true,
+					Class:   tempest.Class(spinner_ui.FormIndicator),
+				},
+			),
 		),
-		spinner_ui.Spinner(
-			spinner_ui.Props{
-				Overlay: true,
-				Class:   tempest.Class(spinner_ui.Indicator),
-			},
+		If(
+			isLink,
+			alpine.Data(map[string]any{"pending": false}),
+			alpine.Class(map[string]string{"link-request": "pending"}),
+			alpine.Click("pending = true"),
+			alpine.KeyUp("pending = false", alpine.Escape),
+			spinner_ui.Spinner(
+				spinner_ui.Props{
+					Overlay: true,
+					Class:   tempest.Class(spinner_ui.LinkIndicator),
+				},
+			),
 		),
 		Fragment(nodes...),
 		If(len(props.Icon) > 0, icon_ui.Icon(icon_ui.Props{Icon: props.Icon, Size: ui.Sm})),

@@ -7,7 +7,9 @@ import (
 )
 
 const (
-	Indicator = "indicator"
+	FormIndicator = "form-indicator"
+	LinkIndicator = "link-indicator"
+	HxIndicator   = "htmx-indicator"
 )
 
 func Spinner(props Props, nodes ...Node) Node {

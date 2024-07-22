@@ -18,7 +18,7 @@ func Anchor(nodes ...Node) Node {
 		spinner_ui.Spinner(
 			spinner_ui.Props{
 				Overlay: true,
-				Class:   tempest.Class(spinner_ui.Indicator),
+				Class:   tempest.Class(spinner_ui.LinkIndicator),
 			},
 		),
 	)

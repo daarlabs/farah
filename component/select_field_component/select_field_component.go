@@ -127,8 +127,8 @@ func (c *SelectField[T]) createMenuProps(open bool) menu_ui.Props {
 		Clickable:  true,
 		Scrollable: true,
 		Open:       open,
-		PositionX:  ui.Left,
-		PositionY:  ui.Bottom,
+		PositionX:  c.Props.PositionX,
+		PositionY:  c.Props.PositionY,
 	}
 }
 

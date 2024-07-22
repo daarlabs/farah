@@ -6,8 +6,14 @@ type Props struct {
 	Label       string
 	Value       string
 	Placeholder string
+	Status      string
 	Messages    []string
 	Autofocus   bool
 	Disabled    bool
 	Required    bool
 }
+
+const (
+	StatusSuccess = "success"
+	StatusError   = "error"
+)
