@@ -18,12 +18,14 @@ func Layout(c hiro.Ctx, nodes ...Node) Node {
 	c.Page().Set().Meta(
 		"viewport", "width=device-width, initial-scale=1",
 	)
+	config := c.Config()
 	return Html(
 		If(len(currentLang) > 0, Lang(currentLang)),
 		Head(
 			If(len(title) > 0, Title(Text(title))),
 			If(len(title) == 0, Title(Text(c.Config().App.Name))),
 			Meta(CharSet("utf-8")),
+			If(!config.App.Robots, Meta(Name("robots"), Content("noindex, nofollow"))),
 			Raw(
 				`
 				<link rel="apple-touch-icon" sizes="180x180" href="/public/favicon/apple-touch-icon.png">

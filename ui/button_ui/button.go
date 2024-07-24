@@ -43,7 +43,7 @@ func CreateButton(props Props, variantClass tempest.Tempest, nodes ...Node) Node
 		),
 		If(
 			isLink,
-			alpine.Data(map[string]any{"pending": false}),
+			alpine.Data(map[string]any{"pending": props.Pending}),
 			alpine.Class(map[string]string{"link-request": "pending"}),
 			alpine.Click("pending = true"),
 			alpine.KeyUp("pending = false", alpine.Escape),
