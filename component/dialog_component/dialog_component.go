@@ -63,7 +63,7 @@ func (c *DialogComponent) createDialog() Node {
 			Div(
 				tempest.Class().Name(c.Request().Action()).
 					Fixed().Z(50).Top("50%").Left("50%").TranslateX("-50%").TranslateY("-50%").
-					Flex().FlexCol().Rounded().MinW("300px").MinH("150px").MaxW("500px").
+					Flex().FlexCol().Rounded().MinW("300px").MaxW("500px").
 					Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
 					BgWhite().BgSlate(800, tempest.Dark()),
 				If(
@@ -74,12 +74,15 @@ func (c *DialogComponent) createDialog() Node {
 						Text(c.Props.Title),
 					),
 				),
-				Fragment(c.Props.Nodes...),
-				Div(
-					tempest.Class().Name(c.Request().Action()).
-						Flex().ItemsCenter().JustifyEnd().P(4).Gap(4).Mt("auto"),
-					c.createCancelButton(),
-					c.createSubmitButton(),
+				c.Props.Content,
+				If(
+					c.Props.Submitable,
+					Div(
+						tempest.Class().Name(c.Request().Action()).
+							Flex().ItemsCenter().JustifyEnd().P(4).Gap(4).Mt("auto"),
+						c.createCancelButton(),
+						c.createSubmitButton(),
+					),
 				),
 			),
 		),
@@ -105,6 +108,9 @@ func (c *DialogComponent) createCloseAction() Node {
 }
 
 func (c *DialogComponent) createCancelButton() Node {
+	if !c.Props.Submitable {
+		return Fragment()
+	}
 	return button_ui.MainButton(
 		button_ui.Props{},
 		c.createCloseAction(),
@@ -113,6 +119,9 @@ func (c *DialogComponent) createCancelButton() Node {
 }
 
 func (c *DialogComponent) createSubmitButton() Node {
+	if !c.Props.Submitable {
+		return Fragment()
+	}
 	return button_ui.PrimaryButton(
 		button_ui.Props{Link: c.Submit.Link, Type: button_ui.TypeSubmit},
 		Text(c.Submit.Title),
