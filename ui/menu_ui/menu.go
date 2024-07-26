@@ -2,8 +2,8 @@ package menu_ui
 
 import (
 	"github.com/daarlabs/hirokit/alpine"
-	"github.com/daarlabs/hirokit/tempest"
 	"github.com/daarlabs/hirokit/hiro"
+	"github.com/daarlabs/hirokit/tempest"
 	
 	"github.com/daarlabs/hirokit/gox"
 	
@@ -18,16 +18,20 @@ func Menu(props Props, handler gox.Node, nodes ...gox.Node) gox.Node {
 		props.PositionY = ui.Bottom
 	}
 	return gox.Div(
-		alpine.Data(hiro.Map{"open": props.Open}),
-		alpine.Click("open = false", alpine.Outside),
 		gox.If(
 			props.Id != "",
 			gox.Id(props.Id),
 		),
-		tempest.Class().Relative().Flex().
-			If(props.Clickable, tempest.Class().Group()),
+		tempest.Class().Relative().Flex(),
+		alpine.Data(hiro.Map{"open": props.Open}),
 		gox.If(
 			props.Clickable,
+			alpine.Click("open = false", alpine.Outside),
+		),
+		gox.If(
+			!props.Clickable,
+			alpine.MouseEnter("open = true"),
+			alpine.MouseLeave("open = false"),
 		),
 		handler,
 		gox.Div(
@@ -56,7 +60,6 @@ func Menu(props Props, handler gox.Node, nodes ...gox.Node) gox.Node {
 				If(props.PositionY == ui.Bottom && props.PositionX == ui.Right, tempest.Class().Origin("top-right")).
 				If(props.PositionY == ui.Top && props.PositionX == ui.Left, tempest.Class().Origin("bottom-left")).
 				If(props.PositionY == ui.Top && props.PositionX == ui.Right, tempest.Class().Origin("bottom-right")).
-				If(!props.Clickable, tempest.Class().Visible(tempest.Hover(tempest.Group))).
 				If(props.Fullwidth, tempest.Class().W("full")).
 				If(!props.Fullwidth, tempest.Class().W("200px")),
 			gox.Fragment(nodes...),

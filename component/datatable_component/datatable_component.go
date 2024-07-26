@@ -252,7 +252,7 @@ func (c *Datatable[T]) createFulltext(param hiro.Map) Node {
 	return Fragment(
 		form_ui.Autofocus(),
 		hx.Get(c.Generate().Action("HandleSearch", param)),
-		hx.Trigger("input delay:300ms"),
+		hx.Trigger("input delay:500ms"),
 		hx.Swap(hx.SwapOuterHtml),
 		hx.Target(hx.HashId(c.Props.Name)),
 	)

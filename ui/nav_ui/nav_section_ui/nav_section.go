@@ -9,7 +9,7 @@ import (
 
 func NavSection(props Props, nodes ...Node) Node {
 	return Div(
-		tempest.Class().Flex().ItemsCenter().
+		tempest.Class().Flex().ItemsCenter().Gap(2).
 			If(props.AlignX == ui.Right, tempest.Class().Ml("auto")).
 			If(props.AlignX == ui.Left, tempest.Class().Mr("auto")).
 			If(props.AlignX == ui.Center, tempest.Class().Mx("auto")),

@@ -7,7 +7,7 @@ import (
 	"github.com/daarlabs/farah/ui"
 )
 
-func Icon(props Props) gox.Node {
+func Icon(props Props, nodes ...gox.Node) gox.Node {
 	if len(props.Size) == 0 {
 		props.Size = ui.Main
 	}
@@ -18,6 +18,7 @@ func Icon(props Props) gox.Node {
 			If(props.Size == tempest.SizeXs, tempest.Class().Size(3)).
 			If(props.Class != nil, props.Class),
 		icons[props.Icon],
+		gox.Fragment(nodes...),
 	)
 }
 
