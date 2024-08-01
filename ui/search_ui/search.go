@@ -1,13 +1,13 @@
 package search_ui
 
 import (
-	"github.com/daarlabs/hirokit/alpine"
-	"github.com/daarlabs/hirokit/gox"
-	"github.com/daarlabs/hirokit/tempest"
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/tempest/util_tempest"
 	"github.com/daarlabs/farah/ui/spinner_ui"
+	"github.com/daarlabs/hirokit/alpine"
+	"github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/tempest"
 	
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/farah/ui/form_ui/error_message_ui"
@@ -30,7 +30,8 @@ func Search(props Props, nodes ...gox.Node) gox.Node {
 		),
 		gox.Div(
 			tempest.Class().Relative(),
-			alpine.Data(map[string]any{"typing": false}),
+			alpine.Data(map[string]any{"submit": false}),
+			alpine.Init("submit = false"),
 			gox.Div(
 				tempest.Class().Absolute().Size(4).InsetY(0).My("auto").Left(3),
 				icon_ui.Icon(
@@ -66,12 +67,13 @@ func Search(props Props, nodes ...gox.Node) gox.Node {
 				gox.If(props.Disabled, gox.Disabled()),
 				gox.If(props.Autofocus, gox.AutoFocus()),
 				gox.Fragment(nodes...),
-				alpine.Input("typing = true"),
+				alpine.KeyDown("submit = true", alpine.Enter),
+				alpine.KeyDown("$el.value = '';$dispatch('change')", alpine.Escape),
 			),
 			spinner_ui.Spinner(
 				spinner_ui.Props{},
 				tempest.Class().Absolute().H(5).Right(3).InsetY(0).My("auto"),
-				alpine.Show("typing"),
+				alpine.Show("submit"),
 				alpine.Cloak(),
 			),
 		),

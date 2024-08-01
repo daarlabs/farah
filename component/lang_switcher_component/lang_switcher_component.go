@@ -29,9 +29,11 @@ func (c *LangSwitcher) Node() Node {
 	currentLang := c.Lang().Current()
 	langs := c.Config().Localization.Languages
 	langsNodes := make([]Node, len(langs))
+	qm := c.Request().QueryMap()
 	for i, lang := range langs {
+		qm["lang"] = lang.Code
 		langsNodes[i] = A(
-			Href(c.Generate().Current(hiro.Map{"lang": lang.Code})),
+			Href(c.Generate().Query(qm)),
 			menu_item_ui.MenuItem(
 				menu_item_ui.Props{
 					Selected: lang.Code == currentLang,

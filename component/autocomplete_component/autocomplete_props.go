@@ -15,6 +15,7 @@ type Props[T comparable] struct {
 	Required  bool
 	PositionX string
 	PositionY string
+	Sync      string
 }
 
 type Query struct {

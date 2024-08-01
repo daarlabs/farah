@@ -26,7 +26,11 @@ var (
 			"component.dark-mode-switcher.dark":  "Temný režim",
 			
 			// Datatable
-			"component.datatable.search": "Vyhledat",
+			"component.datatable.search":               "Vyhledat",
+			"component.datatable.filters.active.title": "Aktivní filtry",
+			"component.datatable.filters.title":        "Filtrace",
+			"component.datatable.filters.apply":        "Aplikovat",
+			"component.datatable.filters.reset":        "Resetovat",
 			
 			// Filepicker
 			"component.filepicker.choose.file": "Vyberte soubor(y)",
@@ -55,7 +59,11 @@ var (
 			"component.dark-mode-switcher.dark":  "Dark mode",
 			
 			// Datatable
-			"component.datatable.search": "Search",
+			"component.datatable.search":               "Search",
+			"component.datatable.filters.active.title": "Active filters",
+			"component.datatable.filters.title":        "Filtration",
+			"component.datatable.filters.apply":        "Apply",
+			"component.datatable.filters.reset":        "Reset",
 			
 			// Filepicker
 			"component.filepicker.choose.file": "Choose file(s)",

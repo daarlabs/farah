@@ -43,7 +43,10 @@ func (c *Autocomplete[T]) Name() string {
 }
 
 func (c *Autocomplete[T]) Mount() {
-	if !c.Request().Is().Action() {
+	if len(c.Query.Value) == 0 {
+		c.Query.Value = "id"
+	}
+	if !c.Request().Is().Action("HandleChooseOption") {
 		c.Options = c.find(
 			dyna.Param{}.Parse(c),
 		)
@@ -194,7 +197,7 @@ func (c *Autocomplete[T]) find(param dyna.Param) []select_model.Option[T] {
 	param.Fields.Fulltext = []string{esquel.Vectors}
 	textField, ok := c.Query.Fields["text"]
 	if ok {
-		param.Fields.Order = map[string]string{"text": textField}
+		param.Fields.Map = map[string]string{"text": textField}
 	}
 	q := dyna.New()
 	if c.FindDataFunc != nil {

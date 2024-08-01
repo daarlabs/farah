@@ -7,7 +7,7 @@ import (
 
 func TabHeader(nodes ...Node) Node {
 	return Div(
-		tempest.Class().Flex().Gap(4).FlexWrap(),
+		tempest.Class().Flex().Gap(2).FlexWrap(),
 		Fragment(nodes...),
 	)
 }

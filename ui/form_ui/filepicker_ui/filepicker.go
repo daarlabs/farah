@@ -77,7 +77,7 @@ func Filepicker(c hiro.Ctx, props Props) Node {
 				Text(c.Translate("component.filepicker.choose.file")),
 			),
 			Div(
-				tempest.Class().Grid().Gap(2),
+				tempest.Class().Grid().Gap(2).BreakAll(),
 				Template(
 					alpine.For("files", "file"),
 					Div(
