@@ -34,6 +34,7 @@ func (c *SelectField[T]) Name() string {
 }
 
 func (c *SelectField[T]) Mount() {
+	c.Options = append([]select_model.Option[T]{{Value: *new(T), Text: "--"}}, c.Options...)
 	if !reflect.ValueOf(c.Props.Value).IsZero() && c.Props.Text == "" {
 		for _, option := range c.Options {
 			if c.Props.Value == option.Value {

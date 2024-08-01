@@ -46,10 +46,11 @@ func (c *Autocomplete[T]) Mount() {
 	if len(c.Query.Value) == 0 {
 		c.Query.Value = "id"
 	}
-	if !c.Request().Is().Action("HandleChooseOption") {
-		c.Options = c.find(
-			dyna.Param{}.Parse(c),
-		)
+	c.Options = c.find(
+		dyna.Param{}.Parse(c),
+	)
+	if c.Offset == 0 {
+		c.Options = append([]select_model.Option[T]{{Value: *new(T), Text: "--"}}, c.Options...)
 	}
 	if !reflect.ValueOf(c.Props.Value).IsZero() && c.Props.Text == "" {
 		c.Props.Text = c.findOne().Text
