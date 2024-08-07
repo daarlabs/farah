@@ -46,11 +46,10 @@ func (c *Autocomplete[T]) Mount() {
 	if len(c.Query.Value) == 0 {
 		c.Query.Value = "id"
 	}
-	c.Options = c.find(
-		dyna.Param{}.Parse(c),
-	)
-	if c.Offset == 0 {
-		c.Options = append([]select_model.Option[T]{{Value: *new(T), Text: "--"}}, c.Options...)
+	if !c.Request().Is().Action() {
+		c.Options = c.find(
+			dyna.Param{}.Parse(c),
+		)
 	}
 	if !reflect.ValueOf(c.Props.Value).IsZero() && c.Props.Text == "" {
 		c.Props.Text = c.findOne().Text
@@ -83,10 +82,17 @@ func (c *Autocomplete[T]) HandleChooseOption() error {
 	c.Options = c.find(dyna.Param{}.Parse(c))
 	c.Parse().MustQuery("text", &c.Props.Text)
 	c.Parse().MustQuery("value", &c.Props.Value)
+	if c.Props.Text == "--" {
+		c.Props.Text = ""
+		c.Props.Value = *new(T)
+	}
 	return c.Response().Render(c.createAutocomplete(false))
 }
 
 func (c *Autocomplete[T]) createAutocomplete(open bool) Node {
+	if c.Offset == 0 {
+		c.Options = append([]select_model.Option[T]{{Value: *new(T), Text: "--"}}, c.Options...)
+	}
 	return menu_ui.Menu(
 		c.createMenuProps(open),
 		c.createHandler(),
@@ -211,7 +217,6 @@ func (c *Autocomplete[T]) find(param dyna.Param) []select_model.Option[T] {
 		q = q.Data(select_model.ConvertToMapSlice(c.Options))
 	}
 	q.MustFind(param, &result)
-	
 	return result
 }
 
