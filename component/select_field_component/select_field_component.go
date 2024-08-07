@@ -58,6 +58,7 @@ func (c *SelectField[T]) HandleChooseOption() error {
 	if c.Props.Refresh {
 		return c.Response().Refresh()
 	}
+	
 	return c.Response().Render(c.createSelectField(false))
 }
 

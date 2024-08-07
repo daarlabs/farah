@@ -211,6 +211,7 @@ func (c *Autocomplete[T]) find(param dyna.Param) []select_model.Option[T] {
 		q = q.Data(select_model.ConvertToMapSlice(c.Options))
 	}
 	q.MustFind(param, &result)
+	
 	return result
 }
 
