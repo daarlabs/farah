@@ -5,6 +5,7 @@ import (
 	
 	"github.com/daarlabs/farah/palette"
 	"github.com/daarlabs/farah/tempest/form_tempest"
+	"github.com/daarlabs/farah/tempest/form_tempest/form_input_tempest"
 	"github.com/daarlabs/farah/ui/form_ui"
 	"github.com/daarlabs/hirokit/dyna"
 	"github.com/daarlabs/hirokit/esquel"
@@ -50,8 +51,9 @@ func (c *MultiAutocomplete[T]) Node() Node {
 }
 
 func (c *MultiAutocomplete[T]) HandleChooseOption() error {
+	c.Props.Value = make([]T, 0)
 	c.Parse().MustQuery(dyna.Fulltext, &c.Props.Text)
-	c.Parse().Multiple().MustQuery("value", &c.Props.Value)
+	c.Parse().MustQuery("value", &c.Props.Value)
 	c.Selected = c.getSelected()
 	c.Options = c.find(dyna.Param{}.Parse(c))
 	return c.Response().Render(c.createMultiAutocomplete(true))
@@ -59,7 +61,7 @@ func (c *MultiAutocomplete[T]) HandleChooseOption() error {
 
 func (c *MultiAutocomplete[T]) HandleSearch() error {
 	c.Parse().MustQuery(dyna.Fulltext, &c.Props.Text)
-	c.Parse().Multiple().MustQuery("value", &c.Props.Value)
+	c.Parse().MustQuery("value", &c.Props.Value)
 	c.Selected = c.getSelected()
 	c.Options = c.find(dyna.Param{Fulltext: c.Props.Text})
 	c.Offset = 0
@@ -79,7 +81,7 @@ func (c *MultiAutocomplete[T]) HandleLoadMore() error {
 func (c *MultiAutocomplete[T]) find(param dyna.Param) []select_model.Option[T] {
 	result := make([]select_model.Option[T], 0)
 	param.Fields.Fulltext = []string{esquel.Vectors}
-	param.Fields.Order = map[string]string{c.Query.Alias: c.Query.Value}
+	param.Fields.Map = map[string]string{c.Query.Alias: c.Query.Value}
 	q := dyna.New()
 	if c.Query.CanUse() {
 		q = q.DB(c.DB(), c.Query)
@@ -119,11 +121,9 @@ func (c *MultiAutocomplete[T]) createMultiAutocomplete(open bool) Node {
 					BorderB(1).BorderSlate(300).BorderSlate(600, tempest.Dark()),
 				Input(
 					If(len(c.Props.Id) > 0, Id(c.Props.Id)),
-					tempest.Class().Transition().W("full").H(8).Pl(3).Pr(7).Rounded().TextSize("10px").
-						BgWhite().BgSlate(800, tempest.Dark()).
-						TextSlate(900).TextWhite(tempest.Dark()).
-						Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
-						BorderColor(palette.Primary, 400, tempest.Focus()).
+					tempest.Class().
+						H(8).
+						Extend(form_input_tempest.InputField(form_input_tempest.Props{})).
 						Extend(form_tempest.FocusShadow()),
 					Type("text"),
 					Name(dyna.Fulltext),
@@ -163,11 +163,11 @@ func (c *MultiAutocomplete[T]) createHandler() Node {
 			Button(
 				Type("button"),
 				If(len(c.Props.Id) > 0, Id(c.Props.Id)),
-				tempest.Class().Transition().W("full").Py(2).Pl(3).Pr(7).Rounded().MinH(2.5).
-					TextLeft().TextXs().TextSlate(900).TextWhite(tempest.Dark()).
-					BgWhite().BgSlate(800, tempest.Dark()).
-					Border(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
-					BorderColor(palette.Primary, 400, tempest.Focus()).
+				tempest.Class().
+					MinH(10).
+					Py(2).
+					Pr(8).
+					Extend(form_input_tempest.InputField(form_input_tempest.Props{})).
 					Extend(form_tempest.FocusShadow()),
 				Div(
 					tempest.Class().Flex().FlexWrap().Gap(1),
@@ -200,12 +200,12 @@ func (c *MultiAutocomplete[T]) createHandler() Node {
 
 func (c *MultiAutocomplete[T]) createSelectedTag(title string, value T) Node {
 	return Div(
-		tempest.Class().Transition().Flex().ItemsCenter().Rounded().Px(1).Py(0.5).ShadowMain().
-			TextXs().TextWhite().
+		tempest.Class().Name(c.Request().Action()).Transition().Flex().ItemsCenter().Rounded().Px(1).Py(0.5).ShadowMain().
+			TextXs().TextWhite().TextLeft().
 			Bg(palette.Primary, 400).Bg(palette.Primary, 200, tempest.Dark()),
 		Text(title),
 		A(
-			tempest.Class().InlineFlex().Ml(1).CursorPointer(),
+			tempest.Class().Name(c.Request().Action()).InlineFlex().Ml(1).CursorPointer(),
 			hx.Get(
 				c.Generate().Action(
 					"HandleChooseOption", hiro.Map{"value": c.removeValue(value), "fulltext": c.Props.Text},
@@ -220,12 +220,18 @@ func (c *MultiAutocomplete[T]) createSelectedTag(title string, value T) Node {
 }
 
 func (c *MultiAutocomplete[T]) createHiddens() Node {
-	return If(
-		len(c.Props.Value) > 0,
-		Range(
-			c.Props.Value, func(item T, _ int) Node {
-				return hidden_field_ui.HiddenField(c.Props.Name, item)
-			},
+	return Fragment(
+		If(
+			len(c.Props.Value) > 0,
+			Range(
+				c.Props.Value, func(item T, _ int) Node {
+					return hidden_field_ui.HiddenField(c.Props.Name, item)
+				},
+			),
+		),
+		If(
+			len(c.Props.Value) == 0,
+			hidden_field_ui.HiddenField(c.Props.Name, ""),
 		),
 	)
 }

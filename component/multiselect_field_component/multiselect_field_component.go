@@ -41,7 +41,7 @@ func (c *MultiSelectField[T]) Node() Node {
 }
 
 func (c *MultiSelectField[T]) HandleChooseOption() error {
-	c.Parse().Multiple().MustQuery("value", &c.Props.Value)
+	c.Parse().MustQuery("value", &c.Props.Value)
 	return c.Response().Render(c.createMultiSelectField(true))
 }
 
