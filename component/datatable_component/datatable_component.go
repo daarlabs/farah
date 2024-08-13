@@ -173,9 +173,13 @@ func (c *Datatable[T]) createHead() Node {
 					el = "div"
 				}
 				return CreateElement(el)(
-					tempest.Class().Relative().Transition().Flex().ItemsCenter().Gap(1).H("full").Px(4).CursorPointer().
+					tempest.Class().Relative().Transition().Flex().ItemsCenter().Gap(1).H("full").Px(4).
 						TextXs().FontSemibold().TextSlate(900).TextWhite(tempest.Dark()).
-						BgSlate(100, tempest.Hover()).BgSlate(700, tempest.Dark(), tempest.Hover()).
+						If(
+							field.Sortable,
+							tempest.Class().BgSlate(100, tempest.Hover()).
+								BgSlate(700, tempest.Dark(), tempest.Hover()).CursorPointer(),
+						).
 						If(field.AlignX == ui.Left, tempest.Class().JustifyStart()).
 						If(field.AlignX == ui.Center, tempest.Class().JustifyCenter()).
 						If(field.AlignX == ui.Right, tempest.Class().JustifyEnd()),
