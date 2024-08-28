@@ -122,30 +122,42 @@ func (c *Datatable[T]) getData() []T {
 }
 
 func (c *Datatable[T]) createDatatable() Node {
+	titleExists := len(c.Props.Title) > 0
+	searchExists := len(c.Param.Fields.Fulltext) > 0
+	showHeadBar := searchExists || c.FiltersFunc != nil || c.FiltersFunc != nil && len(c.ActiveFilters) > 0
+	rows := make([]string, 0)
+	if titleExists {
+		rows = append(rows, "1rem")
+	}
+	if showHeadBar {
+		rows = append(rows, "2.5rem")
+	}
+	rows = append(rows, "1fr")
 	return Div(
-		tempest.Class().H("full").Grid().GridRows("2.5rem 1fr").Gap(4),
+		tempest.Class().H("full").Grid().Gap(4).GridRows(strings.Join(rows, " ")),
 		Id(hx.Id(c.Props.Name)),
-		Div(
-			tempest.Class().Flex().ItemsCenter().Gap(2),
+		If(
+			titleExists,
 			Div(
-				tempest.Class().MaxW("300px"),
-				search_ui.Search(
-					search_ui.Props{
-						Placeholder: c.createSearchLabel(), Value: c.Param.Fulltext, Name: dyna.Fulltext,
-						Id: hx.Id(c.Props.Name + "-" + dyna.Fulltext),
-					},
-					c.createFulltext(hiro.Map{dyna.Order: c.Param.Order}),
-				),
+				tempest.Class().TextSlate(900).TextWhite(tempest.Dark()).TextXs().Mr(4).FontSemibold(),
+				Text(c.Props.Title),
 			),
-			c.createFilters(),
-			c.createActiveFilters(),
+		),
+		If(
+			showHeadBar,
+			Div(
+				tempest.Class().Flex().ItemsCenter().Gap(2),
+				c.createSearch(),
+				c.createFilters(),
+				c.createActiveFilters(),
+			),
 		),
 		box_ui.Box(
 			box_ui.Props{
 				Class: tempest.Class().W("full").H("full"),
 			},
 			Div(
-				tempest.Class().Grid().GridRows("2.5rem 1fr").H("full").
+				tempest.Class().Grid().GridRows("2rem 1fr").H("full").
 					OverflowY("hidden").OverflowX("auto"),
 				c.createHead(),
 				c.createBody(),
@@ -163,7 +175,7 @@ func (c *Datatable[T]) createSearchLabel() string {
 
 func (c *Datatable[T]) createHead() Node {
 	return Div(
-		tempest.Class().Transition().Grid().H(10).W("full").BorderB(1).
+		tempest.Class().Transition().Grid().H(8).W("full").BorderB(1).
 			BorderColor(palette.Primary, 400).BorderColor(palette.Primary, 200, tempest.Dark()).Pr(4),
 		c.createSizeStyle(),
 		Range(
@@ -173,8 +185,13 @@ func (c *Datatable[T]) createHead() Node {
 					el = "div"
 				}
 				return CreateElement(el)(
-					tempest.Class().Relative().Transition().Flex().ItemsCenter().Gap(1).H("full").Px(4).
-						TextXs().FontSemibold().TextSlate(900).TextWhite(tempest.Dark()).
+					tempest.Class().Relative().Transition().Flex().ItemsCenter().Gap(1).H("full").Px(2).
+						TextSize("10px").FontSemibold().TextSlate(900).TextWhite(tempest.Dark()).
+						If(
+							field.Border,
+							tempest.Class().BorderR(1).BorderSlate(300).
+								BorderSlate(600, tempest.Dark()),
+						).
 						If(
 							field.Sortable,
 							tempest.Class().BgSlate(100, tempest.Hover()).
@@ -322,6 +339,22 @@ func (c *Datatable[T]) createActiveFilters() Node {
 					)
 				},
 			),
+		),
+	)
+}
+
+func (c *Datatable[T]) createSearch() Node {
+	if len(c.Param.Fields.Fulltext) == 0 {
+		return Fragment()
+	}
+	return Div(
+		tempest.Class().MaxW("300px"),
+		search_ui.Search(
+			search_ui.Props{
+				Placeholder: c.createSearchLabel(), Value: c.Param.Fulltext, Name: dyna.Fulltext,
+				Id: hx.Id(c.Props.Name + "-" + dyna.Fulltext),
+			},
+			c.createFulltext(hiro.Map{dyna.Order: c.Param.Order}),
 		),
 	)
 }

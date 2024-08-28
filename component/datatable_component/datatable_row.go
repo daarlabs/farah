@@ -41,9 +41,6 @@ func (b *rowBuilder[T]) Link(link string, nodes ...Node) Node {
 }
 
 func (b *rowBuilder[T]) Row(nodes ...Node) Node {
-	if len(b.fields) != len(nodes) {
-		panic(ErrorFieldsLenMismtach)
-	}
 	return Div(
 		tempest.Class().Grid(),
 		b.sizeStyle,
@@ -65,11 +62,16 @@ func (b *rowBuilder[T]) Field(node Node, config ...FieldConfig) Node {
 		cfg = config[0]
 	}
 	return Div(
-		tempest.Class().Transition().Px(4).H(10).TextSize("10px").
+		tempest.Class().Transition().Px(2).H(8).TextSize("10px").
 			Flex().ItemsCenter().
 			TextSlate(900).TextWhite(tempest.Dark()).
 			BorderB(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
 			Overflow("hidden").
+			If(
+				field.Border,
+				tempest.Class().BorderR(1).BorderSlate(300).
+					BorderSlate(600, tempest.Dark()),
+			).
 			If(field.AlignX == ui.Left, tempest.Class().JustifyStart()).
 			If(field.AlignX == ui.Center, tempest.Class().JustifyCenter()).
 			If(field.AlignX == ui.Right, tempest.Class().JustifyEnd()),

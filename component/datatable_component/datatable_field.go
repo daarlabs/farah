@@ -6,4 +6,5 @@ type Field struct {
 	Title    string
 	AlignX   string
 	Sortable bool
+	Border   bool
 }
