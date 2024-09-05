@@ -66,6 +66,7 @@ func Search(props Props, nodes ...gox.Node) gox.Node {
 				gox.If(props.Placeholder != "", gox.Placeholder(props.Placeholder)),
 				gox.If(props.Disabled, gox.Disabled()),
 				gox.If(props.Autofocus, gox.AutoFocus()),
+				gox.AutoComplete("off"),
 				gox.Fragment(nodes...),
 				alpine.KeyDown("submit = true", alpine.Enter),
 				alpine.KeyDown("$el.value = '';$dispatch('change')", alpine.Escape),

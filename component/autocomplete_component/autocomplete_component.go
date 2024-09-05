@@ -125,6 +125,7 @@ func (c *Autocomplete[T]) createHandler() Node {
 				Type("text"),
 				Value(c.Props.Text),
 				Name("fulltext"),
+				AutoComplete("off"),
 				hx.Get(c.Generate().Action("HandleSearch", c.Param)),
 				hx.Trigger("input delay:500ms"),
 				hx.Swap(hx.SwapOuterHtml),

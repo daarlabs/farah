@@ -128,6 +128,7 @@ func (c *MultiAutocomplete[T]) createMultiAutocomplete(open bool) Node {
 					Type("text"),
 					Name(dyna.Fulltext),
 					Value(c.Props.Text),
+					AutoComplete("off"),
 					If(c.Props.Text != "", CustomData("autofocus")),
 					form_ui.Autofocus(),
 					hx.Get(c.Generate().Action("HandleSearch", hiro.Map{"value": c.Props.Value})),
