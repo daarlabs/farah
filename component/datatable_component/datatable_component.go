@@ -53,6 +53,9 @@ func (c *Datatable[T]) Name() string {
 }
 
 func (c *Datatable[T]) Mount() {
+	if len(c.Props.MinWidth) == 0 {
+		c.Props.MinWidth = "1200px"
+	}
 	c.Param.Fields.Map = c.Query.Fields
 	if c.FieldsFunc != nil {
 		c.headerRows = c.FieldsFunc()
@@ -159,11 +162,13 @@ func (c *Datatable[T]) createDatatable() Node {
 				Class: tempest.Class().W("full").H("full"),
 			},
 			Div(
-				tempest.Class().Grid().H("full").
-					OverflowY("hidden").OverflowX("auto"),
-				Style(Attribute(), Raw(fmt.Sprintf("grid-template-rows: %drem 1fr", len(c.headerRows)*2))),
-				c.createHead(),
-				c.createBody(),
+				tempest.Class().Grid().H("full").W("full").OverflowY("hidden").OverflowX("auto"),
+				Div(
+					tempest.Class().Grid().H("full").MinW(c.Props.MinWidth),
+					Style(Attribute(), Raw(fmt.Sprintf("grid-template-rows: %drem 1fr", len(c.headerRows)*2))),
+					c.createHead(),
+					c.createBody(),
+				),
 			),
 		),
 	)

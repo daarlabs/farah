@@ -22,8 +22,6 @@ func Box(props Props, nodes ...Node) Node {
 				Text(props.Title),
 			),
 		),
-		Div(
-			Fragment(nodes...),
-		),
+		Fragment(nodes...),
 	)
 }
