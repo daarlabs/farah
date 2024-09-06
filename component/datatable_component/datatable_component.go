@@ -34,13 +34,14 @@ type Datatable[T any] struct {
 	Param         dyna.Param                          `json:"-"`
 	Query         dyna.Query                          `json:"-"`
 	FindDataFunc  func(param dyna.Param, t any) error `json:"-"`
-	FieldsFunc    func() []Field                      `json:"-"`
+	FieldsFunc    func() [][]Field                    `json:"-"`
 	RowFunc       func(builder RowBuilder[T]) Node    `json:"-"`
 	ActiveFilters map[string]string                   `json:"-"`
 	FiltersFunc   func() Node                         `json:"-"`
 	Data          []T                                 `json:"-"`
 	
-	fields []Field
+	fields     []Field
+	headerRows [][]Field
 }
 
 var (
@@ -54,7 +55,8 @@ func (c *Datatable[T]) Name() string {
 func (c *Datatable[T]) Mount() {
 	c.Param.Fields.Map = c.Query.Fields
 	if c.FieldsFunc != nil {
-		c.fields = c.FieldsFunc()
+		c.headerRows = c.FieldsFunc()
+		c.fields = c.headerRows[len(c.headerRows)-1]
 	}
 	if !c.Request().Is().Action() {
 		c.Data = c.getData()
@@ -157,8 +159,9 @@ func (c *Datatable[T]) createDatatable() Node {
 				Class: tempest.Class().W("full").H("full"),
 			},
 			Div(
-				tempest.Class().Grid().GridRows("2rem 1fr").H("full").
+				tempest.Class().Grid().H("full").
 					OverflowY("hidden").OverflowX("auto"),
+				Style(Attribute(), Raw(fmt.Sprintf("grid-template-rows: %drem 1fr", len(c.headerRows)*2))),
 				c.createHead(),
 				c.createBody(),
 			),
@@ -175,62 +178,68 @@ func (c *Datatable[T]) createSearchLabel() string {
 
 func (c *Datatable[T]) createHead() Node {
 	return Div(
-		tempest.Class().Transition().Grid().H(8).W("full").BorderB(1).
-			BorderColor(palette.Primary, 400).BorderColor(palette.Primary, 200, tempest.Dark()).Pr(4),
-		c.createSizeStyle(),
 		Range(
-			c.fields, func(field Field, _ int) Node {
-				el := "a"
-				if !field.Sortable {
-					el = "div"
-				}
-				return CreateElement(el)(
-					tempest.Class().Relative().Transition().Flex().ItemsCenter().Gap(1).H("full").Px(2).
-						TextSize("10px").FontSemibold().TextSlate(900).TextWhite(tempest.Dark()).
-						If(
-							field.Border,
-							tempest.Class().BorderR(1).BorderSlate(300).
-								BorderSlate(600, tempest.Dark()),
-						).
-						If(
-							field.Sortable,
-							tempest.Class().BgSlate(100, tempest.Hover()).
-								BgSlate(700, tempest.Dark(), tempest.Hover()).CursorPointer(),
-						).
-						If(field.AlignX == ui.Left, tempest.Class().JustifyStart()).
-						If(field.AlignX == ui.Center, tempest.Class().JustifyCenter()).
-						If(field.AlignX == ui.Right, tempest.Class().JustifyEnd()),
-					Text(field.Title),
-					If(
-						field.Sortable,
-						spinner_ui.Spinner(
-							spinner_ui.Props{Overlay: true, Class: tempest.Class(spinner_ui.HxIndicator)},
-						),
-						c.createOrder(
-							hiro.Map{
-								dyna.Fulltext: c.Param.Fulltext, dyna.Order: c.createNextOrder(field.Name),
-							},
-						),
-						If(
-							slices.Contains(c.Param.Order, field.Name+":"+dyna.Asc),
-							icon_ui.Icon(
-								icon_ui.Props{
-									Icon:  icon_ui.ChevronUp,
-									Class: tempest.Class().FlexNone().TextSlate(900).TextWhite(tempest.Dark()),
-									Size:  ui.Sm,
-								},
-							),
-						),
-						If(
-							slices.Contains(c.Param.Order, field.Name+":"+dyna.Desc),
-							icon_ui.Icon(
-								icon_ui.Props{
-									Icon:  icon_ui.ChevronDown,
-									Class: tempest.Class().FlexNone().TextSlate(900).TextWhite(tempest.Dark()),
-									Size:  ui.Sm,
-								},
-							),
-						),
+			c.headerRows, func(row []Field, _ int) Node {
+				return Div(
+					tempest.Class().Transition().Grid().H(8).W("full").BorderB(1).
+						BorderColor(palette.Primary, 400).BorderColor(palette.Primary, 200, tempest.Dark()).Pr(4),
+					c.createSizeStyle(row),
+					Range(
+						row, func(field Field, _ int) Node {
+							el := "a"
+							if !field.Sortable {
+								el = "div"
+							}
+							return CreateElement(el)(
+								tempest.Class().Relative().Transition().Flex().ItemsCenter().Gap(1).H("full").Px(2).
+									TextSize("10px").FontSemibold().TextSlate(900).TextWhite(tempest.Dark()).
+									If(
+										field.Border,
+										tempest.Class().BorderR(1).BorderSlate(300).
+											BorderSlate(600, tempest.Dark()),
+									).
+									If(
+										field.Sortable,
+										tempest.Class().BgSlate(100, tempest.Hover()).
+											BgSlate(700, tempest.Dark(), tempest.Hover()).CursorPointer(),
+									).
+									If(field.AlignX == ui.Left, tempest.Class().JustifyStart()).
+									If(field.AlignX == ui.Center, tempest.Class().JustifyCenter()).
+									If(field.AlignX == ui.Right, tempest.Class().JustifyEnd()),
+								Text(field.Title),
+								If(
+									field.Sortable,
+									spinner_ui.Spinner(
+										spinner_ui.Props{Overlay: true, Class: tempest.Class(spinner_ui.HxIndicator)},
+									),
+									c.createOrder(
+										hiro.Map{
+											dyna.Fulltext: c.Param.Fulltext, dyna.Order: c.createNextOrder(field.Name),
+										},
+									),
+									If(
+										slices.Contains(c.Param.Order, field.Name+":"+dyna.Asc),
+										icon_ui.Icon(
+											icon_ui.Props{
+												Icon:  icon_ui.ChevronUp,
+												Class: tempest.Class().FlexNone().TextSlate(900).TextWhite(tempest.Dark()),
+												Size:  ui.Sm,
+											},
+										),
+									),
+									If(
+										slices.Contains(c.Param.Order, field.Name+":"+dyna.Desc),
+										icon_ui.Icon(
+											icon_ui.Props{
+												Icon:  icon_ui.ChevronDown,
+												Class: tempest.Class().FlexNone().TextSlate(900).TextWhite(tempest.Dark()),
+												Size:  ui.Sm,
+											},
+										),
+									),
+								),
+							)
+						},
 					),
 				)
 			},
@@ -250,7 +259,9 @@ func (c *Datatable[T]) createActiveFilters() Node {
 	var activeFilters = make(map[string]string)
 	var fields []Field
 	if c.FieldsFunc != nil {
-		fields = c.FieldsFunc()
+		c.headerRows = c.FieldsFunc()
+		c.fields = c.headerRows[len(c.headerRows)-1]
+		fields = c.fields
 	}
 	for fieldName, fieldText := range c.ActiveFilters {
 		var value, fieldTitle string
@@ -411,7 +422,8 @@ func (c *Datatable[T]) createFilters() Node {
 }
 
 func (c *Datatable[T]) createRows() Node {
-	sizeStyle := c.createSizeStyle()
+	fields := c.headerRows[len(c.headerRows)-1]
+	sizeStyle := c.createSizeStyle(fields)
 	return If(
 		len(c.Data) > 0 && c.RowFunc != nil,
 		Range(
@@ -457,13 +469,13 @@ func (c *Datatable[T]) createNextOrder(name string) []string {
 	return result
 }
 
-func (c *Datatable[T]) createSizeStyle() Node {
+func (c *Datatable[T]) createSizeStyle(fields []Field) Node {
 	n := len(c.fields)
 	if n == 0 {
 		return Fragment()
 	}
 	size := make([]string, n)
-	for i, f := range c.fields {
+	for i, f := range fields {
 		size[i] = f.Size
 	}
 	return Style(Text("grid-template-columns: " + strings.Join(size, " ") + ";"))
