@@ -164,7 +164,7 @@ func (c *Datatable[T]) createDatatable() Node {
 			Div(
 				tempest.Class().Grid().H("full").W("full").OverflowY("hidden").OverflowX("auto"),
 				Div(
-					tempest.Class().Grid().H("full").MinW(c.Props.MinWidth),
+					tempest.Class().Grid().H("full").MinW(c.Props.MinWidth).Overflow("hidden"),
 					Style(Attribute(), Raw(fmt.Sprintf("grid-template-rows: %drem 1fr", len(c.headerRows)*2))),
 					c.createHead(),
 					c.createBody(),
