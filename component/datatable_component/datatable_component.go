@@ -162,13 +162,10 @@ func (c *Datatable[T]) createDatatable() Node {
 				Class: tempest.Class().W("full").H("full"),
 			},
 			Div(
-				tempest.Class().Grid().H("full").W("full").OverflowY("hidden").OverflowX("auto"),
-				Div(
-					tempest.Class().Grid().H("full").MinW(c.Props.MinWidth).Overflow("hidden"),
-					Style(Attribute(), Raw(fmt.Sprintf("grid-template-rows: %drem 1fr", len(c.headerRows)*2))),
-					c.createHead(),
-					c.createBody(),
-				),
+				tempest.Class().Grid().H("full").MinW(c.Props.MinWidth).Overflow("auto"),
+				Style(Attribute(), Raw(fmt.Sprintf("grid-template-rows: %drem 1fr", len(c.headerRows)*2))),
+				c.createHead(),
+				c.createBody(),
 			),
 		),
 	)
@@ -183,11 +180,12 @@ func (c *Datatable[T]) createSearchLabel() string {
 
 func (c *Datatable[T]) createHead() Node {
 	return Div(
+		tempest.Class().Sticky().Top(0).BgWhite().BgSlate(800, tempest.Dark()),
 		Range(
 			c.headerRows, func(row []Field, _ int) Node {
 				return Div(
 					tempest.Class().Transition().Grid().H(8).W("full").BorderB(1).
-						BorderColor(palette.Primary, 400).BorderColor(palette.Primary, 200, tempest.Dark()).Pr(4),
+						BorderColor(palette.Primary, 400).BorderColor(palette.Primary, 200, tempest.Dark()),
 					c.createSizeStyle(row),
 					Range(
 						row, func(field Field, _ int) Node {
@@ -255,7 +253,6 @@ func (c *Datatable[T]) createHead() Node {
 func (c *Datatable[T]) createBody() Node {
 	return Div(
 		Id(hx.Id(c.Props.Name+"-rows")),
-		tempest.Class().OverflowY("scroll").H("full"),
 		c.createRows(),
 	)
 }
