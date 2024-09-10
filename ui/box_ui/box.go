@@ -18,7 +18,7 @@ func Box(props Props, nodes ...Node) Node {
 		If(
 			titleExists,
 			Div(
-				tempest.Class().P(4).TextSm().FontSemibold().TextSlate(900).TextWhite(tempest.Dark()),
+				tempest.Class().P(4).TextXs().FontSemibold().TextSlate(900).TextWhite(tempest.Dark()),
 				Text(props.Title),
 			),
 		),

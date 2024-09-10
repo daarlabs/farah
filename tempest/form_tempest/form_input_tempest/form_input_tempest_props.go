@@ -5,4 +5,5 @@ type Props struct {
 	Text        string
 	Placeholder string
 	Status      string
+	Size        string
 }

@@ -49,7 +49,7 @@ var (
 )
 
 func (c *Datatable[T]) Name() string {
-	return "datatable"
+	return c.Props.Name
 }
 
 func (c *Datatable[T]) Mount() {
@@ -163,7 +163,7 @@ func (c *Datatable[T]) createDatatable() Node {
 			},
 			Div(
 				tempest.Class().Grid().H("full").MinW(c.Props.MinWidth).Overflow("auto"),
-				Style(Attribute(), Raw(fmt.Sprintf("grid-template-rows: %drem 1fr", len(c.headerRows)*2))),
+				Style(Attribute(), Raw(fmt.Sprintf("grid-template-rows: %.2frem 1fr", float64(len(c.headerRows))*1.75))),
 				c.createHead(),
 				c.createBody(),
 			),
@@ -184,7 +184,7 @@ func (c *Datatable[T]) createHead() Node {
 		Range(
 			c.headerRows, func(row []Field, _ int) Node {
 				return Div(
-					tempest.Class().Transition().Grid().H(8).W("full").BorderB(1).
+					tempest.Class().Transition().Grid().H(7).W("full").BorderB(1).
 						BorderColor(palette.Primary, 400).BorderColor(palette.Primary, 200, tempest.Dark()),
 					c.createSizeStyle(row),
 					Range(

@@ -17,6 +17,7 @@ type Props struct {
 	Required    bool
 	Boxed       bool
 	Status      string
+	Size        string
 }
 
 const (

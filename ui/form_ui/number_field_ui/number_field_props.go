@@ -10,6 +10,7 @@ type Props[T constraints.Integer | constraints.Float] struct {
 	Id        string
 	Name      string
 	Label     string
+	Size      string
 	Value     T
 	Messages  []string
 	Autofocus bool

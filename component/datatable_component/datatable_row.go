@@ -62,7 +62,7 @@ func (b *rowBuilder[T]) Field(node Node, config ...FieldConfig) Node {
 		cfg = config[0]
 	}
 	return Div(
-		tempest.Class().Transition().Px(2).H(8).TextSize("10px").
+		tempest.Class().Transition().Px(2).H(7).TextSize("10px").
 			Flex().ItemsCenter().
 			TextSlate(900).TextWhite(tempest.Dark()).
 			BorderB(1).BorderSlate(300).BorderSlate(600, tempest.Dark()).
