@@ -26,6 +26,7 @@ var (
 			"component.dark-mode-switcher.dark":  "Temný režim",
 			
 			// Datatable
+			"component.datatable.no-data":              "Žádná data",
 			"component.datatable.search":               "Vyhledat",
 			"component.datatable.filters.active.title": "Aktivní filtry",
 			"component.datatable.filters.title":        "Filtrace",
@@ -59,6 +60,7 @@ var (
 			"component.dark-mode-switcher.dark":  "Dark mode",
 			
 			// Datatable
+			"component.datatable.no-data":              "No data",
 			"component.datatable.search":               "Search",
 			"component.datatable.filters.active.title": "Active filters",
 			"component.datatable.filters.title":        "Filtration",

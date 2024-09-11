@@ -162,7 +162,11 @@ func (c *Datatable[T]) createDatatable() Node {
 				Class: tempest.Class().W("full").H("full"),
 			},
 			Div(
-				tempest.Class().Grid().H("full").MinW(c.Props.MinWidth).Overflow("auto"),
+				tempest.Class().Grid().
+					H("full").
+					MinW(c.Props.MinWidth).
+					If(len(c.Props.MaxHeight) > 0, tempest.Class().MaxH(c.Props.MaxHeight)).
+					Overflow("auto"),
 				Style(Attribute(), Raw(fmt.Sprintf("grid-template-rows: %.2frem 1fr", float64(len(c.headerRows))*1.75))),
 				c.createHead(),
 				c.createBody(),
@@ -424,10 +428,19 @@ func (c *Datatable[T]) createFilters() Node {
 }
 
 func (c *Datatable[T]) createRows() Node {
+	if c.RowFunc == nil {
+		return Fragment()
+	}
 	fields := c.headerRows[len(c.headerRows)-1]
 	sizeStyle := c.createSizeStyle(fields)
+	if len(c.Data) == 0 {
+		return Div(
+			tempest.Class().TextCenter().P(6).TextSlate(700).TextSlate(200, tempest.Dark()).TextXs(),
+			Text(c.createNoDataTitle()),
+		)
+	}
 	return If(
-		len(c.Data) > 0 && c.RowFunc != nil,
+		len(c.Data) > 0,
 		Range(
 			c.Data,
 			func(item T, index int) Node {
@@ -551,4 +564,11 @@ func (c *Datatable[T]) createBoolTitle() string {
 		return "Yes"
 	}
 	return c.Translate("data.yes")
+}
+
+func (c *Datatable[T]) createNoDataTitle() string {
+	if !c.Config().Localization.Enabled {
+		return "No data"
+	}
+	return c.Translate("component.datatable.no-data")
 }

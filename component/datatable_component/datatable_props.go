@@ -1,7 +1,8 @@
 package datatable_component
 
 type Props struct {
-	Name     string
-	Title    string
-	MinWidth string
+	Name      string
+	Title     string
+	MinWidth  string
+	MaxHeight string
 }
