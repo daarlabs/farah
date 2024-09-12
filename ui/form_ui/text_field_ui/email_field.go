@@ -1,16 +1,16 @@
 package text_field_ui
 
 import (
-	. "github.com/daarlabs/hirokit/gox"
-	"github.com/daarlabs/hirokit/tempest"
 	"github.com/daarlabs/farah/tempest/form_tempest"
 	"github.com/daarlabs/farah/tempest/form_tempest/form_input_tempest"
 	"github.com/daarlabs/farah/tempest/util_tempest"
 	"github.com/daarlabs/farah/ui/form_ui/error_message_ui"
 	"github.com/daarlabs/farah/ui/form_ui/field_label_ui"
+	. "github.com/daarlabs/hirokit/gox"
+	"github.com/daarlabs/hirokit/tempest"
 )
 
-func EmailField(props Props) Node {
+func EmailField(props Props, nodes ...Node) Node {
 	return Div(
 		tempest.Class().Flex().FlexCol().Gap(1),
 		If(
@@ -43,6 +43,7 @@ func EmailField(props Props) Node {
 			Value(props.Value),
 			If(props.Disabled, Disabled()),
 			If(props.Autofocus, AutoFocus()),
+			Fragment(nodes...),
 		),
 		Range(
 			props.Messages, func(msg string, _ int) Node {
