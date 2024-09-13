@@ -3,6 +3,7 @@ package autocomplete_component
 import (
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/hirokit/form"
+	"github.com/daarlabs/hirokit/gox"
 )
 
 type Props[T comparable] struct {
@@ -16,6 +17,7 @@ type Props[T comparable] struct {
 	PositionX string
 	PositionY string
 	Sync      string
+	Nodes     []gox.Node
 }
 
 type Query struct {

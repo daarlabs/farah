@@ -58,7 +58,6 @@ func (c *SelectField[T]) HandleChooseOption() error {
 	if c.Props.Refresh {
 		return c.Response().Refresh()
 	}
-	
 	return c.Response().Render(c.createSelectField(false))
 }
 
@@ -109,7 +108,11 @@ func (c *SelectField[T]) createSelectField(open bool) Node {
 						},
 					),
 				),
-				hidden_field_ui.HiddenField(c.Props.Name, c.Props.Value),
+				hidden_field_ui.HiddenField(
+					c.Props.Name,
+					c.Props.Value,
+					Fragment(c.Props.Nodes...),
+				),
 			),
 			Range(
 				c.Props.Messages, func(msg string, _ int) Node {

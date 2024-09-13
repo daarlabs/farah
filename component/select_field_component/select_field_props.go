@@ -4,6 +4,7 @@ import (
 	"github.com/daarlabs/farah/model/select_model"
 	"github.com/daarlabs/farah/ui"
 	"github.com/daarlabs/hirokit/form"
+	"github.com/daarlabs/hirokit/gox"
 )
 
 type Props[T comparable] struct {
@@ -20,6 +21,7 @@ type Props[T comparable] struct {
 	OnChange    func(option select_model.Option[T])
 	PositionX   string
 	PositionY   string
+	Nodes       []gox.Node
 }
 
 func CreateProps[T comparable](field form.Field[T]) Props[T] {

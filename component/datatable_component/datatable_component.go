@@ -435,7 +435,9 @@ func (c *Datatable[T]) createRows() Node {
 	sizeStyle := c.createSizeStyle(fields)
 	if len(c.Data) == 0 {
 		return Div(
-			tempest.Class().TextCenter().P(6).TextSlate(700).TextSlate(200, tempest.Dark()).TextXs(),
+			tempest.Class().Name(c.Request().Action()).TextCenter().P(6).TextSlate(700).TextSlate(
+				200, tempest.Dark(),
+			).TextXs(),
 			Text(c.createNoDataTitle()),
 		)
 	}

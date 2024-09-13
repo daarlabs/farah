@@ -142,7 +142,7 @@ func (c *Autocomplete[T]) createHandler() Node {
 					},
 				),
 			),
-			hidden_field_ui.HiddenField(c.Props.Name, c.Props.Value),
+			hidden_field_ui.HiddenField(c.Props.Name, c.Props.Value, c.Props.Nodes...),
 		),
 		Range(
 			c.Props.Messages, func(msg string, _ int) Node {
