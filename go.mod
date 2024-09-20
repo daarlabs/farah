@@ -3,7 +3,7 @@ module github.com/daarlabs/farah
 go 1.22
 
 require (
-	github.com/daarlabs/hirokit v0.2.8
+	github.com/daarlabs/hirokit v0.2.9
 	github.com/dchest/uniuri v1.2.0
 	github.com/iancoleman/strcase v0.3.0
 	golang.org/x/exp v0.0.0-20240707233637-46b078467d37

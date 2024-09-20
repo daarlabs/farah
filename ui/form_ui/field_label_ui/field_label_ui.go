@@ -9,7 +9,7 @@ func FieldLabel(props Props) Node {
 	return Label(
 		If(len(props.For) > 0, For(props.For)),
 		tempest.Class().Transition().Text(tempest.Slate, 600).Text(tempest.Slate, 300, tempest.Dark()).
-			TextSize("10px").Cursor("pointer"),
+			TextSize("10px").Cursor("pointer").MinH("1rem").Flex().ItemsCenter(),
 		Text(props.Text),
 		If(
 			props.Required,
